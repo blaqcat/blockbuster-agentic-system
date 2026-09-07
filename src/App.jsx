@@ -18,6 +18,7 @@ import AiBreakdownModal from './components/AiBreakdownModal';
 import ExportModal from './components/ExportModal';
 import UserRoleInfoModal from './components/UserRoleInfoModal';
 import AuthGate from './components/AuthGate';
+import IAPLandingPage from './components/IAPLandingPage';
 
 export default function App() {
   const [project, setProject] = useState(INITIAL_PROJECT);
@@ -30,6 +31,21 @@ export default function App() {
   const [showImportModal, setShowImportModal] = useState(false);
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
+
+  if (showAuthGate) {
+  return (
+    <IAPLandingPage 
+      onLoginSuccess={(user) => {
+        if (user.roleId && USER_ROLES[user.roleId]) {
+          setCurrentRoleKey(user.roleId);
+        }
+        setShowAuthGate(false);
+        setSuccessBanner(`✨ Authenticated via Google Cloud IAP as ${user.name} (${user.role})`);
+        setTimeout(() => setSuccessBanner(''), 4000);
+      }}
+    />
+  );
+}
   
   // 4 Levels of Users State
   const [currentRoleKey, setCurrentRoleKey] = useState('EXECUTIVE_DIRECTOR');
