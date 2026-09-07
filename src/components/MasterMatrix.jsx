@@ -67,7 +67,8 @@ export default function MasterMatrix({
     <div className="space-y-6">
       {/* Table Section */}
       <div className="space-y-3">
-        <div className="grid grid-cols-12 gap-3 px-4 py-2.5 bg-[#141721] rounded-t-xl border border-[#1E2333] text-[11px] font-bold uppercase tracking-wider text-gray-400">
+        {/* Desktop Table Header */}
+        <div className="hidden md:grid grid-cols-12 gap-3 px-4 py-2.5 bg-[#141721] rounded-t-xl border border-[#1E2333] text-[11px] font-bold uppercase tracking-wider text-gray-400">
           <div className="col-span-1">Scene</div>
           <div className="col-span-3">Slugline &amp; Cast</div>
           <div className="col-span-1 text-center">Runtime</div>
@@ -87,77 +88,145 @@ export default function MasterMatrix({
               <div 
                 key={scene.id} 
                 onClick={() => onSelectScene(scene)}
-                className={`grid grid-cols-12 gap-3 items-center px-4 py-3 bg-[#141721] rounded-xl border transition cursor-pointer hover:border-indigo-500/50 ${
-                  isSelected ? 'border-indigo-500 bg-[#141721]/95 ring-1 ring-indigo-500/30' : 'border-[#1E2333]'
+                className={`transition cursor-pointer ${
+                  isSelected ? 'ring-1 ring-indigo-500/50' : ''
                 }`}
               >
-                <div className="col-span-1 flex items-center space-x-2">
-                  <span className="w-8 h-8 rounded-lg bg-[#1E2333] font-mono font-bold text-xs flex items-center justify-center text-amber-400 border border-[#2C344B]">
-                    {scene.sceneNumber}
-                  </span>
-                  <span className="text-[10px] text-gray-400">{scene.act}</span>
-                </div>
-
-                <div className="col-span-3">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-mono text-xs font-semibold text-gray-200 truncate">{scene.slugline}</span>
-                    {reviewCount > 0 && (
-                      <span className="inline-flex items-center space-x-0.5 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 text-[9px] font-mono">
-                        <Star className="w-2.5 h-2.5 fill-sky-300" />
-                        <span>{reviewCount}</span>
+                {/* Mobile Scene Card (< md) */}
+                <div className={`md:hidden p-3 bg-[#141721] rounded-xl border space-y-2.5 transition ${
+                  isSelected ? 'border-indigo-500 bg-[#161A26]' : 'border-[#1E2333] hover:border-gray-700'
+                }`}>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center space-x-2 min-w-0">
+                      <span className="w-7 h-7 rounded-lg bg-[#1E2333] font-mono font-bold text-xs flex items-center justify-center text-amber-400 border border-[#2C344B] shrink-0">
+                        {scene.sceneNumber}
                       </span>
-                    )}
+                      <div className="min-w-0">
+                        <div className="flex items-center space-x-1.5">
+                          <span className="text-[10px] text-gray-400 font-mono">{scene.act}</span>
+                          <span className="font-mono text-xs font-semibold text-gray-200 truncate">{scene.slugline}</span>
+                        </div>
+                        <div className="text-[10px] text-gray-400 truncate mt-0.5">
+                          Cast: {scene.characters.join(', ')}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end shrink-0">
+                      <span className="text-[11px] font-mono text-gray-300 bg-[#0B0D13] px-2 py-0.5 rounded border border-[#1E2333]">
+                        {scene.runtimeEst}
+                      </span>
+                      {reviewCount > 0 && (
+                        <span className="inline-flex items-center space-x-0.5 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 text-[9px] font-mono mt-1">
+                          <Star className="w-2.5 h-2.5 fill-sky-300" />
+                          <span>{reviewCount} reviews</span>
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-[11px] text-gray-400 truncate mt-0.5">
-                    Cast: {scene.characters.join(', ')}
+
+                  {/* Interactive Statuses on Mobile */}
+                  <div className="pt-2 border-t border-[#1E2333]/80 flex flex-wrap items-center gap-1.5 text-[10px]">
+                    <div className="flex items-center space-x-1" onClick={(e) => handlePictureStatusClick(e, scene)}>
+                      <span className="text-gray-500 uppercase font-bold text-[9px]">Pic:</span>
+                      <StatusBadge status={scene.picture.status} />
+                    </div>
+
+                    <div className="flex items-center space-x-1" onClick={(e) => handleCraftStatusClick(e, scene, 'sound')}>
+                      <span className="text-gray-500 uppercase font-bold text-[9px]">Snd:</span>
+                      <StatusBadge status={scene.sound.status} />
+                    </div>
+
+                    <div className="flex items-center space-x-1" onClick={(e) => handleCraftStatusClick(e, scene, 'vfx')}>
+                      <span className="text-gray-500 uppercase font-bold text-[9px]">VFX:</span>
+                      <StatusBadge status={scene.vfx.status} />
+                      <span className="text-[9px] text-purple-300 font-mono">({scene.vfx.shotsApproved}/{scene.vfx.shotsCount})</span>
+                    </div>
+
+                    <div className="flex items-center space-x-1" onClick={(e) => handleCraftStatusClick(e, scene, 'color')}>
+                      <span className="text-gray-500 uppercase font-bold text-[9px]">Col:</span>
+                      <StatusBadge status={scene.color.status} />
+                    </div>
+
+                    <div className="flex items-center space-x-1" onClick={(e) => handleCraftStatusClick(e, scene, 'mastering')}>
+                      <span className="text-gray-500 uppercase font-bold text-[9px]">QC:</span>
+                      <StatusBadge status={scene.mastering.status} />
+                    </div>
                   </div>
                 </div>
 
-                <div className="col-span-1 text-center font-mono text-xs text-gray-300">
-                  {scene.runtimeEst}
-                </div>
+                {/* Desktop High-Density Table Row (>= md) */}
+                <div className={`hidden md:grid grid-cols-12 gap-3 items-center px-4 py-3 bg-[#141721] rounded-xl border transition hover:border-indigo-500/50 ${
+                  isSelected ? 'border-indigo-500 bg-[#141721]/95 ring-1 ring-indigo-500/30' : 'border-[#1E2333]'
+                }`}>
+                  <div className="col-span-1 flex items-center space-x-2">
+                    <span className="w-8 h-8 rounded-lg bg-[#1E2333] font-mono font-bold text-xs flex items-center justify-center text-amber-400 border border-[#2C344B]">
+                      {scene.sceneNumber}
+                    </span>
+                    <span className="text-[10px] text-gray-400">{scene.act}</span>
+                  </div>
 
-                {/* Picture Column */}
-                <div className="col-span-1 flex justify-center">
-                  <StatusBadge 
-                    status={scene.picture.status} 
-                    onClick={(e) => handlePictureStatusClick(e, scene)}
-                  />
-                </div>
+                  <div className="col-span-3">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-mono text-xs font-semibold text-gray-200 truncate">{scene.slugline}</span>
+                      {reviewCount > 0 && (
+                        <span className="inline-flex items-center space-x-0.5 px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 text-[9px] font-mono">
+                          <Star className="w-2.5 h-2.5 fill-sky-300" />
+                          <span>{reviewCount}</span>
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-gray-400 truncate mt-0.5">
+                      Cast: {scene.characters.join(', ')}
+                    </div>
+                  </div>
 
-                {/* Sound Column */}
-                <div className="col-span-2 flex justify-center">
-                  <StatusBadge 
-                    status={scene.sound.status} 
-                    onClick={(e) => handleCraftStatusClick(e, scene, 'sound')}
-                  />
-                </div>
+                  <div className="col-span-1 text-center font-mono text-xs text-gray-300">
+                    {scene.runtimeEst}
+                  </div>
 
-                {/* VFX Column */}
-                <div className="col-span-2 flex flex-col items-center justify-center">
-                  <StatusBadge 
-                    status={scene.vfx.status} 
-                    onClick={(e) => handleCraftStatusClick(e, scene, 'vfx')}
-                  />
-                  <span className="text-[10px] text-purple-300 font-mono mt-1">
-                    {scene.vfx.shotsApproved}/{scene.vfx.shotsCount} shots
-                  </span>
-                </div>
+                  {/* Picture Column */}
+                  <div className="col-span-1 flex justify-center">
+                    <StatusBadge 
+                      status={scene.picture.status} 
+                      onClick={(e) => handlePictureStatusClick(e, scene)}
+                    />
+                  </div>
 
-                {/* Color Column */}
-                <div className="col-span-1 flex justify-center">
-                  <StatusBadge 
-                    status={scene.color.status} 
-                    onClick={(e) => handleCraftStatusClick(e, scene, 'color')}
-                  />
-                </div>
+                  {/* Sound Column */}
+                  <div className="col-span-2 flex justify-center">
+                    <StatusBadge 
+                      status={scene.sound.status} 
+                      onClick={(e) => handleCraftStatusClick(e, scene, 'sound')}
+                    />
+                  </div>
 
-                {/* Master Column */}
-                <div className="col-span-1 flex justify-center">
-                  <StatusBadge 
-                    status={scene.mastering.status} 
-                    onClick={(e) => handleCraftStatusClick(e, scene, 'mastering')}
-                  />
+                  {/* VFX Column */}
+                  <div className="col-span-2 flex flex-col items-center justify-center">
+                    <StatusBadge 
+                      status={scene.vfx.status} 
+                      onClick={(e) => handleCraftStatusClick(e, scene, 'vfx')}
+                    />
+                    <span className="text-[10px] text-purple-300 font-mono mt-1">
+                      {scene.vfx.shotsApproved}/{scene.vfx.shotsCount} shots
+                    </span>
+                  </div>
+
+                  {/* Color Column */}
+                  <div className="col-span-1 flex justify-center">
+                    <StatusBadge 
+                      status={scene.color.status} 
+                      onClick={(e) => handleCraftStatusClick(e, scene, 'color')}
+                    />
+                  </div>
+
+                  {/* Master Column */}
+                  <div className="col-span-1 flex justify-center">
+                    <StatusBadge 
+                      status={scene.mastering.status} 
+                      onClick={(e) => handleCraftStatusClick(e, scene, 'mastering')}
+                    />
+                  </div>
                 </div>
               </div>
             );

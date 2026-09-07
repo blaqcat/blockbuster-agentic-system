@@ -78,11 +78,11 @@ export default function IAPLandingPage({ onLoginSuccess }) {
       <div className="absolute bottom-10 -left-20 w-[600px] h-[350px] bg-cyan-600/10 blur-[170px] rounded-full pointer-events-none" />
 
       {/* Top Zero-Trust Status Bar */}
-      <div className="bg-[#0B0D13]/80 border-b border-[#1E2436] px-6 py-2.5 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 text-xs relative z-20">
-        <div className="flex items-center space-x-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span className="font-mono text-emerald-400 font-semibold tracking-wide">
-            GOOGLE CLOUD IAP ACTIVE
+      <div className="bg-[#0B0D13]/80 border-b border-[#1E2436] px-3 sm:px-6 py-2 sm:py-2.5 backdrop-blur-md flex items-center justify-between gap-2 text-xs relative z-20">
+        <div className="flex items-center space-x-1.5 sm:space-x-2 min-w-0">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+          <span className="font-mono text-emerald-400 font-semibold tracking-wide text-[11px] sm:text-xs truncate">
+            GCP IAP ACTIVE
           </span>
           <span className="text-gray-500 hidden sm:inline">&bull;</span>
           <span className="text-gray-400 hidden sm:inline font-mono">
@@ -94,23 +94,24 @@ export default function IAPLandingPage({ onLoginSuccess }) {
           </span>
         </div>
 
-        <div className="flex items-center space-x-3 text-[11px] font-mono">
+        <div className="flex items-center space-x-2 sm:space-x-3 text-[11px] font-mono shrink-0">
           <button 
             onClick={() => setShowArchModal(true)}
-            className="flex items-center space-x-1 px-2.5 py-1 rounded bg-[#1A2030] hover:bg-indigo-950/80 border border-[#2C344B] text-indigo-300 hover:text-indigo-200 transition"
+            className="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded bg-[#1A2030] hover:bg-indigo-950/80 border border-[#2C344B] text-indigo-300 hover:text-indigo-200 transition"
           >
             <Network className="w-3.5 h-3.5 text-indigo-400" />
-            <span>View Architecture</span>
+            <span className="hidden xs:inline">View Architecture</span>
+            <span className="xs:hidden">Arch</span>
           </button>
-          <span className="flex items-center space-x-1 text-emerald-400 hidden sm:flex">
+          <span className="items-center space-x-1 text-emerald-400 hidden sm:flex">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Zero-Trust Enforced</span>
+            <span>Zero-Trust</span>
           </span>
         </div>
       </div>
 
       {/* Main Content Viewport */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-6 py-10 lg:py-14 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center relative z-10">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 lg:py-14 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
         
         {/* Left Column: Studio Brand & Enterprise Intelligence Pitch */}
         <div className="lg:col-span-7 space-y-6">
@@ -380,8 +381,8 @@ export default function IAPLandingPage({ onLoginSuccess }) {
 
       {/* Architecture Topology Modal */}
       {showArchModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#10131E] border border-[#23293D] rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-[#10131E] border border-[#23293D] rounded-3xl max-w-2xl w-full p-4 sm:p-8 space-y-4 sm:space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2.5">
                 <div className="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center">

@@ -68,7 +68,7 @@ export default function EnterpriseAgentsHub({ project, geminiApiKey, currentRole
   return (
     <div className="space-y-6">
       {/* Enterprise Fleet Banner */}
-      <div className="bg-[#141721] border border-[#1E2333] rounded-2xl p-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      <div className="bg-[#141721] border border-[#1E2333] rounded-2xl p-4 sm:p-6 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6">
         <div className="space-y-1.5 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center space-x-1">
@@ -84,7 +84,7 @@ export default function EnterpriseAgentsHub({ project, geminiApiKey, currentRole
             </span>
           </div>
 
-          <h2 className="text-lg font-bold text-white tracking-tight flex items-center space-x-2">
+          <h2 className="text-base sm:text-lg font-bold text-white tracking-tight flex items-center space-x-2">
             <span>Autonomous Department Run-Down &amp; SLA Reminders</span>
           </h2>
 
@@ -93,12 +93,12 @@ export default function EnterpriseAgentsHub({ project, geminiApiKey, currentRole
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           {canRunAudit ? (
             <button
               onClick={handleRunAudit}
               disabled={isRunningAudit}
-              className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30 transition"
+              className="flex items-center justify-center space-x-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/30 transition w-full sm:w-auto"
             >
               {isRunningAudit ? (
                 <>
@@ -115,7 +115,7 @@ export default function EnterpriseAgentsHub({ project, geminiApiKey, currentRole
           ) : (
             <button
               onClick={() => alert(`Running live fleet audits is an Executive Director (Level 1) capability. You can inspect all agent monitors below.`)}
-              className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-[#1E2333] text-gray-400 text-xs font-semibold border border-[#2C344B] transition"
+              className="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-[#1E2333] text-gray-400 text-xs font-semibold border border-[#2C344B] transition w-full sm:w-auto"
             >
               <Lock className="w-3.5 h-3.5 text-amber-400" />
               <span>Audit Managed by Level 1 Director</span>

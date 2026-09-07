@@ -91,13 +91,13 @@ export default function DepartmentKanban({
   return (
     <div className="space-y-4">
       {/* Department Tabs Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div className="flex items-center space-x-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none flex-nowrap sm:flex-wrap -mx-1 px-1">
           {DEPARTMENTS.map(dept => (
             <button
               key={dept.id}
               onClick={() => onSelectDept(dept.id)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-semibold transition border ${
+              className={`flex items-center space-x-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition border shrink-0 ${
                 selectedDept === dept.id
                   ? `${dept.bg} ${dept.color} ${dept.border} ring-1 ring-indigo-500/30`
                   : 'bg-[#141721] text-gray-400 border-[#1E2333] hover:text-gray-200'
@@ -108,22 +108,22 @@ export default function DepartmentKanban({
           ))}
         </div>
 
-        <div className="flex items-center space-x-2 text-[11px] text-gray-400 font-mono">
+        <div className="flex items-center space-x-2 text-[10px] sm:text-[11px] text-gray-400 font-mono">
           <span className={`px-2 py-0.5 rounded border uppercase text-[10px] font-bold ${currentRole.badgeColor}`}>
             L{currentRole.level} Access
           </span>
           {currentRoleKey === 'CLIENT_REVIEWER' ? (
-            <span className="text-sky-300">Screening Mode (Read-Only Swimlanes)</span>
+            <span className="text-sky-300">Screening Mode (Read-Only)</span>
           ) : (
-            <span>Use arrows on cards to advance stages</span>
+            <span className="hidden sm:inline">Use arrows to advance stages</span>
           )}
         </div>
       </div>
 
       {/* Kanban Swimlanes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-2 sm:mt-4">
         {columns.map((col, colIdx) => (
-          <div key={col.key} className="bg-[#141721]/80 border border-[#1E2333] rounded-2xl p-3.5 flex flex-col min-h-[500px]">
+          <div key={col.key} className="bg-[#141721]/80 border border-[#1E2333] rounded-2xl p-3.5 flex flex-col min-h-[220px] md:min-h-[500px]">
             <div className="flex items-center justify-between pb-3 border-b border-[#1E2333] mb-3">
               <span className="font-semibold text-xs tracking-wider uppercase text-gray-300">{col.title}</span>
               <span className="px-2 py-0.5 rounded-full bg-[#1E2333] text-[10px] font-mono text-gray-400">

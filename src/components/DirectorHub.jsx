@@ -49,13 +49,13 @@ export default function DirectorHub({
             </h3>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <span className="text-xs text-gray-400 font-mono">Filter by Act:</span>
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none flex-nowrap sm:flex-wrap -mx-1 px-1">
+            <span className="text-xs text-gray-400 font-mono shrink-0">Filter by Act:</span>
             {['ALL', 'Act I', 'Act IIA', 'Act IIB', 'Act III'].map((act) => (
               <button
                 key={act}
                 onClick={() => setActiveFilter(act)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition border ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition border shrink-0 ${
                   activeFilter === act
                     ? 'bg-indigo-600/30 text-indigo-300 border-indigo-500/50'
                     : 'bg-[#0B0D13] text-gray-400 border-[#1E2333] hover:text-gray-200'
@@ -79,14 +79,14 @@ export default function DirectorHub({
                 <div 
                   key={s.id} 
                   onClick={() => onSelectScene(s)}
-                  className={`p-5 bg-[#0B0D13] rounded-2xl border transition cursor-pointer ${
+                  className={`p-4 sm:p-5 bg-[#0B0D13] rounded-2xl border transition cursor-pointer ${
                     isSelected ? 'border-indigo-500 ring-1 ring-indigo-500/30 bg-[#0E121C]' : 'border-[#1E2333] hover:border-[#2C344B]'
                   }`}
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                     <div className="flex-1 space-y-3">
                       {/* Scene Header */}
-                      <div className="flex items-center space-x-3">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="font-mono text-xs font-bold text-amber-400 px-2 py-0.5 rounded bg-[#141721] border border-[#1E2333]">
                           Scene {s.sceneNumber} ({s.act})
                         </span>

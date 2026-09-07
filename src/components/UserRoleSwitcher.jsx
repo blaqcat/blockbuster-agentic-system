@@ -50,18 +50,18 @@ export default function UserRoleSwitcher({
                 {currentRole.shortTitle}
               </span>
             </div>
-            <span className="text-[10px] text-gray-400 font-mono block truncate max-w-[140px]">
+            <span className="text-[10px] text-gray-400 font-mono block truncate max-w-[85px] sm:max-w-[140px]">
               {currentRole.defaultUser.name.split(' ')[0]} &bull; {currentRole.department}
             </span>
           </div>
-          <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
         </button>
 
         {/* Quick Info Matrix Button */}
         <button
           onClick={onOpenRoleMatrix}
           title="Compare 4 User Levels & Permissions"
-          className="p-1.5 rounded-lg bg-[#141721] hover:bg-[#1E2333] text-gray-400 hover:text-indigo-400 border border-[#1E2333] transition"
+          className="p-1.5 rounded-lg bg-[#141721] hover:bg-[#1E2333] text-gray-400 hover:text-indigo-400 border border-[#1E2333] transition shrink-0"
         >
           <Info className="w-3.5 h-3.5" />
         </button>
@@ -74,7 +74,7 @@ export default function UserRoleSwitcher({
             className="fixed inset-0 z-20" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-80 bg-[#11141E] border border-[#222B40] rounded-2xl shadow-2xl p-3 z-30 space-y-2 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-1.5rem)] bg-[#11141E] border border-[#222B40] rounded-2xl shadow-2xl p-3 z-30 space-y-2 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150">
             <div className="px-2 py-1.5 border-b border-[#1E2436] flex items-center justify-between">
               <span className="text-[11px] font-bold tracking-wider text-gray-300 uppercase">
                 Select Interactive User Level

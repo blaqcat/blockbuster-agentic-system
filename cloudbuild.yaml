@@ -64,6 +64,8 @@ substitutions:
   _REPO_NAME: 'cloud-run-source-deploy'
   _SERVICE_ACCOUNT_EMAIL: 'vertex-express@ace-vial-371506.iam.gserviceaccount.com'
 
+serviceAccount: 'projects/ace-vial-371506/serviceAccounts/vertex-express@ace-vial-371506.iam.gserviceaccount.com'
+
 options:
   logging: 'CLOUD_LOGGING_ONLY'
-  substitution_option: 'ALLOW_LOOSE'
+  substitution_option: 'ALLOW_LOOSE'

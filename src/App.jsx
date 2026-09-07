@@ -275,11 +275,12 @@ export default function App() {
       )}
 
       {/* Sub Navigation Bar */}
-      <div className="bg-[#141721] border-b border-[#1E2333] px-6 py-2.5 flex flex-wrap gap-3 items-center justify-between">
-        <div className="flex flex-wrap items-center gap-1.5">
+      <div className="bg-[#141721] border-b border-[#1E2333] px-3 sm:px-6 py-2 sm:py-2.5 flex flex-col md:flex-row gap-2.5 sm:gap-3 md:items-center justify-between">
+        {/* Horizontal Touch Scrollable Tab Bar */}
+        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none scroll-smooth -mx-1 px-1">
           <button
             onClick={() => setActiveTab('matrix')}
-            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
               activeTab === 'matrix' 
                 ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40' 
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
@@ -291,81 +292,82 @@ export default function App() {
 
           <button
             onClick={() => setActiveTab('kanban')}
-            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
               activeTab === 'kanban' 
                 ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40' 
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
             }`}
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
-            <span>Department Pipeline Board</span>
+            <span>Department Board</span>
           </button>
 
           <button
             onClick={() => setActiveTab('script')}
-            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
               activeTab === 'script' 
                 ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40' 
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
-            <span>Script &amp; Emotional Beats</span>
+            <span>Script &amp; Beats</span>
           </button>
 
           <button
             onClick={() => setActiveTab('review')}
-            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
               activeTab === 'review' 
                 ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40' 
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
             }`}
           >
             <MessageSquare className="w-3.5 h-3.5" />
-            <span>Director Review Hub</span>
+            <span>Director Hub</span>
           </button>
 
           <button
             onClick={() => setActiveTab('agents')}
-            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
               activeTab === 'agents' 
                 ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40' 
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
             }`}
           >
             <Bot className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Enterprise Agents (Reminders)</span>
+            <span>Agents (Reminders)</span>
           </button>
 
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
               activeTab === 'analytics' 
                 ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/40' 
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
             }`}
           >
             <BarChart3 className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Director Analytics (Grafana)</span>
+            <span>Director Analytics</span>
           </button>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <div className="relative">
+        {/* Search & Act Filter Controls */}
+        <div className="flex items-center space-x-2 w-full md:w-auto">
+          <div className="relative flex-1 md:w-48">
             <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-gray-400" />
             <input 
               type="text" 
               placeholder="Search slugline, cast..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-[#0B0D13] border border-[#1E2333] rounded-lg pl-8 pr-3 py-1 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-indigo-500 w-48"
+              className="bg-[#0B0D13] border border-[#1E2333] rounded-lg pl-8 pr-3 py-1 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-indigo-500 w-full"
             />
           </div>
 
           <select 
             value={filterAct}
             onChange={(e) => setFilterAct(e.target.value)}
-            className="bg-[#0B0D13] border border-[#1E2333] rounded-lg px-2.5 py-1 text-xs text-gray-300 focus:outline-none focus:border-indigo-500"
+            className="bg-[#0B0D13] border border-[#1E2333] rounded-lg px-2.5 py-1 text-xs text-gray-300 focus:outline-none focus:border-indigo-500 shrink-0"
           >
             <option value="ALL">All Acts</option>
             <option value="Act I">Act I</option>
@@ -377,7 +379,7 @@ export default function App() {
       </div>
 
       {/* Main Content Viewport */}
-      <main className="flex-1 p-6 overflow-y-auto">
+      <main className="flex-1 p-3 sm:p-6 overflow-y-auto">
         {activeTab === 'matrix' && (
           <MasterMatrix 
             filteredScenes={filteredScenes} 

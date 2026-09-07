@@ -29,19 +29,19 @@ export default function UserRoleInfoModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-      <div className="relative w-full max-w-5xl bg-[#11141E] border border-[#222B40] rounded-3xl shadow-2xl p-6 md:p-8 space-y-6 max-h-[92vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+      <div className="relative w-full max-w-5xl bg-[#11141E] border border-[#222B40] rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 max-h-[92vh] overflow-y-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#1E2436]">
+        <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-[#1E2436]">
           <div className="space-y-1">
             <div className="flex items-center space-x-2">
-              <span className="px-3 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                4-Level Role-Based Access Control (RBAC)
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                4-Level RBAC
               </span>
-              <span className="text-xs text-gray-400">&bull; Film Post-Production Enterprise Engine</span>
+              <span className="text-xs text-gray-400 hidden sm:inline">&bull; Film Post-Production OS</span>
             </div>
-            <h2 className="text-xl font-black text-white tracking-tight">
+            <h2 className="text-base sm:text-xl font-black text-white tracking-tight">
               Interactive User Levels &amp; Permissions Matrix
             </h2>
           </div>
