@@ -21,8 +21,13 @@ steps:
     id: 'push-image'
     args:
       - 'push'
-      - '--all-tags'
-      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-image-latest'
+    args:
+      - 'push'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:latest'
 
   # ---------------------------------------------------------------------------
   # Step 3: Deploy the container to Google Cloud Run
@@ -53,11 +58,12 @@ images:
 # Substitution Variables
 # -----------------------------------------------------------------------------
 substitutions:
-  _SERVICE_NAME: 'blockbuster'
+  COMMIT_SHA: 'latest'
+  _SERVICE_NAME: 'blockbuster-app'
   _REGION: 'europe-west1'
   _REPO_NAME: 'cloud-run-source-deploy'
   _SERVICE_ACCOUNT_EMAIL: 'vertex-express@ace-vial-371506.iam.gserviceaccount.com'
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'
-  substitution_option: 'ALLOW_LOOSE'
+  substitution_option: 'ALLOW_LOOSE'

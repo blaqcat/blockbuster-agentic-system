@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { 
   Film, ShieldCheck, Lock, ArrowRight, UserCheck, Sparkles, 
   CheckCircle2, Users, Star, Eye, Zap, Bot, Clapperboard, 
-  SlidersHorizontal, Radio, Shield, Server, FileText, ChevronRight
+  SlidersHorizontal, Radio, Shield, Server, FileText, ChevronRight,
+  Network, Cpu, Globe, KeyRound, ExternalLink, X
 } from 'lucide-react';
 import { USER_ROLES } from '../services/userRoles';
 
 export default function IAPLandingPage({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
-  const [studioPasscode, setStudioPasscode] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [activePersonaHover, setActivePersonaHover] = useState(null);
+  const [selectedPersonaId, setSelectedPersonaId] = useState('EXECUTIVE_DIRECTOR');
+  const [showArchModal, setShowArchModal] = useState(false);
 
   const handleSelectRoleLogin = (roleId) => {
     setIsLoggingIn(true);
@@ -33,7 +34,7 @@ export default function IAPLandingPage({ onLoginSuccess }) {
   };
 
   const handleGoogleSignIn = () => {
-    handleSelectRoleLogin('EXECUTIVE_DIRECTOR');
+    handleSelectRoleLogin(selectedPersonaId || 'EXECUTIVE_DIRECTOR');
   };
 
   const handleStudioPasscodeLogin = (e) => {
@@ -66,6 +67,8 @@ export default function IAPLandingPage({ onLoginSuccess }) {
     }, 700);
   };
 
+  const activePersona = USER_ROLES[selectedPersonaId] || USER_ROLES.EXECUTIVE_DIRECTOR;
+
   return (
     <div className="min-h-screen bg-[#07090E] text-gray-100 flex flex-col font-sans relative overflow-x-hidden selection:bg-indigo-500 selection:text-white">
       
@@ -85,14 +88,24 @@ export default function IAPLandingPage({ onLoginSuccess }) {
           <span className="text-gray-400 hidden sm:inline font-mono">
             Project: <strong className="text-gray-200">ace-vial-371506</strong>
           </span>
+          <span className="text-gray-500 hidden md:inline">&bull;</span>
+          <span className="text-gray-400 hidden md:inline font-mono">
+            Region: <strong className="text-gray-200">europe-west1</strong>
+          </span>
         </div>
 
-        <div className="flex items-center space-x-4 text-[11px] font-mono text-gray-400">
-          <span className="flex items-center space-x-1 text-indigo-300">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>BeyondCorp Zero-Trust Enabled</span>
+        <div className="flex items-center space-x-3 text-[11px] font-mono">
+          <button 
+            onClick={() => setShowArchModal(true)}
+            className="flex items-center space-x-1 px-2.5 py-1 rounded bg-[#1A2030] hover:bg-indigo-950/80 border border-[#2C344B] text-indigo-300 hover:text-indigo-200 transition"
+          >
+            <Network className="w-3.5 h-3.5 text-indigo-400" />
+            <span>View Architecture</span>
+          </button>
+          <span className="flex items-center space-x-1 text-emerald-400 hidden sm:flex">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Zero-Trust Enforced</span>
           </span>
-          <span className="hidden md:inline text-gray-400">TLS 1.3 OIDC</span>
         </div>
       </div>
 
@@ -112,13 +125,13 @@ export default function IAPLandingPage({ onLoginSuccess }) {
             </h1>
 
             <p className="text-base sm:text-lg text-gray-300 max-w-2xl font-normal leading-relaxed">
-              Synchronize your Editorial Cut with Sound, VFX, Color, and Mastering. Grounded by <strong>Gemini 1.5 Enterprise Multi-Agents</strong>, real-time OpenTimelineIO turnovers, and 4-tier Role-Based Access.
+              Synchronize Editorial Cuts across Sound, VFX, Color, and Mastering. Grounded by <strong>Gemini 1.5 Enterprise Multi-Agents</strong>, real-time OpenTimelineIO turnovers, and 4-tier Role-Based Access secured behind Google Cloud Identity-Aware Proxy.
             </p>
           </div>
 
           {/* 3 Core Platform Pillar Badges */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
-            <div className="p-4 rounded-2xl bg-[#11141E]/80 border border-[#1E2436] backdrop-blur space-y-1.5">
+            <div className="p-4 rounded-2xl bg-[#11141E]/80 border border-[#1E2436] backdrop-blur space-y-1.5 hover:border-amber-500/40 transition">
               <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center">
                 <Clapperboard className="w-4 h-4" />
               </div>
@@ -128,44 +141,89 @@ export default function IAPLandingPage({ onLoginSuccess }) {
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#11141E]/80 border border-[#1E2436] backdrop-blur space-y-1.5">
+            <div className="p-4 rounded-2xl bg-[#11141E]/80 border border-[#1E2436] backdrop-blur space-y-1.5 hover:border-purple-500/40 transition">
               <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center">
                 <Bot className="w-4 h-4" />
               </div>
               <h3 className="text-xs font-bold text-white">6 Autonomous Agents</h3>
               <p className="text-[11px] text-gray-400 leading-normal">
-                Live department audits and SLA run-down dispatchers.
+                Department audits, VFX breakdown, and SLA run-down dispatchers.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#11141E]/80 border border-[#1E2436] backdrop-blur space-y-1.5">
+            <div className="p-4 rounded-2xl bg-[#11141E]/80 border border-[#1E2436] backdrop-blur space-y-1.5 hover:border-emerald-500/40 transition">
               <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center">
                 <SlidersHorizontal className="w-4 h-4" />
               </div>
-              <h3 className="text-xs font-bold text-white">4-Level RBAC</h3>
+              <h3 className="text-xs font-bold text-white">4-Tier IAP Security</h3>
               <p className="text-[11px] text-gray-400 leading-normal">
-                Granular permissions from Executive Director to Client Reviewer.
+                Zero-Trust IAM policies from Executive Director to Client Reviewer.
               </p>
             </div>
           </div>
 
-          {/* Real-time Project Milestone Telemetry Preview */}
-          <div className="p-4 rounded-2xl bg-[#0C0F17]/90 border border-[#1E2436] flex flex-wrap items-center justify-between gap-4 text-xs">
-            <div className="flex items-center space-x-3">
-              <div className="w-2.5 h-2.5 rounded-full bg-indigo-400"></div>
-              <div>
-                <span className="text-[10px] uppercase font-bold text-gray-400 block">Production Asset</span>
-                <span className="font-semibold text-white">Dune: Part Two (Full Editorial Reel)</span>
-              </div>
+          {/* Interactive Persona Deep-Dive Card */}
+          <div className="p-4 rounded-2xl bg-[#0C0F17]/90 border border-[#1E2436] space-y-3">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[11px] uppercase font-bold text-gray-400 flex items-center space-x-1.5">
+                <Shield className="w-3.5 h-3.5 text-indigo-400" />
+                <span>Selected Persona Clearance</span>
+              </span>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${activePersona.badgeColor}`}>
+                Level {activePersona.level}: {activePersona.title}
+              </span>
             </div>
 
-            <div className="flex items-center space-x-4 font-mono text-[11px]">
-              <div>
-                <span className="text-gray-400">Lock Rate:</span> <span className="text-emerald-400 font-bold">75%</span>
+            <div className="flex items-start space-x-3 text-xs">
+              <img 
+                src={activePersona.defaultUser.avatar} 
+                alt={activePersona.defaultUser.name}
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-500/40 shrink-0" 
+              />
+              <div className="space-y-1 flex-1">
+                <div className="flex items-center justify-between">
+                  <div className="font-bold text-white">{activePersona.defaultUser.name}</div>
+                  <div className="text-[11px] font-mono text-gray-400">{activePersona.defaultUser.email}</div>
+                </div>
+                <p className="text-[11px] text-gray-300 leading-relaxed">
+                  {activePersona.description}
+                </p>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {activePersona.permissions.canLockPicture && (
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                      Picture Lock Authority
+                    </span>
+                  )}
+                  {activePersona.permissions.canImportScript && (
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/30">
+                      Gemini Script Breakdown
+                    </span>
+                  )}
+                  {activePersona.permissions.canExportTimeline && (
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
+                      OpenTimelineIO Turnover
+                    </span>
+                  )}
+                  {activePersona.permissions.canApproveCraft && (
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                      Craft Sign-off
+                    </span>
+                  )}
+                </div>
               </div>
-              <div>
-                <span className="text-gray-400">VFX:</span> <span className="text-purple-400 font-bold">148/210 Approved</span>
-              </div>
+            </div>
+          </div>
+
+          {/* Real-time Project Milestone Telemetry Preview */}
+          <div className="p-3.5 rounded-2xl bg-[#0C0F17]/60 border border-[#1E2436] flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+            <div className="flex items-center space-x-2.5">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></div>
+              <span className="text-gray-400">Current Reel:</span>
+              <span className="font-bold text-white">Dune: Part Two (Full Editorial Turnover)</span>
+            </div>
+            <div className="flex items-center space-x-4 text-[11px]">
+              <span className="text-gray-400">Lock Rate: <strong className="text-emerald-400">75%</strong></span>
+              <span className="text-gray-400">Cloud Run: <strong className="text-indigo-400">europe-west1</strong></span>
             </div>
           </div>
         </div>
@@ -184,7 +242,7 @@ export default function IAPLandingPage({ onLoginSuccess }) {
               </span>
             </div>
             <p className="text-xs text-gray-400">
-              Sign in via Google Workspace or fast-track as an authorized user level.
+              Select your persona below to authenticate with Google Cloud IAP credentials.
             </p>
           </div>
 
@@ -198,35 +256,45 @@ export default function IAPLandingPage({ onLoginSuccess }) {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {Object.values(USER_ROLES).map((role) => (
-                <button
-                  key={role.id}
-                  type="button"
-                  onClick={() => handleSelectRoleLogin(role.id)}
-                  disabled={isLoggingIn}
-                  className="text-left p-2.5 rounded-xl bg-[#0B0D13] border border-[#1E2436] hover:border-indigo-500/60 hover:bg-[#141824] transition duration-150 flex items-center space-x-2.5 group active:scale-[0.98]"
-                >
-                  <img 
-                    src={role.defaultUser.avatar} 
-                    alt={role.defaultUser.name}
-                    className="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-white/10 group-hover:ring-indigo-400/50 transition" 
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-1">
-                      <span className={`text-[8px] font-bold px-1 py-0.2 rounded border uppercase ${role.badgeColor}`}>
-                        L{role.level}
-                      </span>
-                      <span className="text-[11px] font-bold text-white group-hover:text-indigo-300 transition truncate">
-                        {role.shortTitle}
-                      </span>
+              {Object.values(USER_ROLES).map((role) => {
+                const isSelected = selectedPersonaId === role.id;
+                return (
+                  <button
+                    key={role.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedPersonaId(role.id);
+                      handleSelectRoleLogin(role.id);
+                    }}
+                    disabled={isLoggingIn}
+                    className={`text-left p-2.5 rounded-xl border transition duration-150 flex items-center space-x-2.5 group active:scale-[0.98] ${
+                      isSelected 
+                        ? 'bg-[#181D2E] border-indigo-500 ring-1 ring-indigo-500/50' 
+                        : 'bg-[#0B0D13] border-[#1E2436] hover:border-indigo-500/60 hover:bg-[#141824]'
+                    }`}
+                  >
+                    <img 
+                      src={role.defaultUser.avatar} 
+                      alt={role.defaultUser.name}
+                      className="w-8 h-8 rounded-full object-cover shrink-0 ring-1 ring-white/10 group-hover:ring-indigo-400/50 transition" 
+                    />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center space-x-1">
+                        <span className={`text-[8px] font-bold px-1 py-0.2 rounded border uppercase ${role.badgeColor}`}>
+                          L{role.level}
+                        </span>
+                        <span className="text-[11px] font-bold text-white group-hover:text-indigo-300 transition truncate">
+                          {role.shortTitle}
+                        </span>
+                      </div>
+                      <div className="text-[10px] text-gray-400 font-mono truncate">
+                        {role.defaultUser.name}
+                      </div>
                     </div>
-                    <div className="text-[10px] text-gray-400 font-mono truncate">
-                      {role.defaultUser.name}
-                    </div>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 text-gray-600 group-hover:text-indigo-400 transition shrink-0" />
-                </button>
-              ))}
+                    <ChevronRight className="w-3.5 h-3.5 text-gray-600 group-hover:text-indigo-400 transition shrink-0" />
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -295,7 +363,7 @@ export default function IAPLandingPage({ onLoginSuccess }) {
           {/* Card Footer Security Specs */}
           <div className="pt-2 border-t border-[#1E2436] flex items-center justify-between text-[10px] text-gray-500 font-mono">
             <span>Auth: vertex-express</span>
-            <span className="text-indigo-400">Gemini 1.5 Grounded</span>
+            <span className="text-indigo-400">Gemini 1.5 Multi-Agents</span>
           </div>
         </div>
       </main>
@@ -304,9 +372,90 @@ export default function IAPLandingPage({ onLoginSuccess }) {
       <footer className="bg-[#0B0D13]/90 border-t border-[#1E2436] px-6 py-4 text-xs text-gray-500 text-center relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>&copy; 2026 BLOCKBUSTER Film Intelligence OS. All Rights Reserved.</span>
-          <span className="font-mono text-[11px] text-gray-400">Secured with Google Cloud Identity-Aware Proxy &bull; Project ace-vial-371506</span>
+          <span className="font-mono text-[11px] text-gray-400">
+            Secured with Google Cloud Identity-Aware Proxy &bull; Project ace-vial-371506
+          </span>
         </div>
       </footer>
+
+      {/* Architecture Topology Modal */}
+      {showArchModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#10131E] border border-[#23293D] rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center">
+                  <Network className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Google Cloud IAP Architecture</h3>
+                  <p className="text-xs text-gray-400 font-mono">Production Zero-Trust Ingress Blueprint</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowArchModal(false)}
+                className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Architecture Steps Flow */}
+            <div className="space-y-3 font-mono text-xs">
+              <div className="p-3.5 rounded-xl bg-[#0B0D14] border border-[#1E2436] flex items-center justify-between">
+                <div>
+                  <div className="text-gray-400 text-[10px] uppercase font-bold">1. Edge Client</div>
+                  <div className="text-white font-semibold">Director / Editor Browser (HTTPS : 443)</div>
+                </div>
+                <Globe className="w-5 h-5 text-indigo-400" />
+              </div>
+
+              <div className="text-center text-gray-600">&darr;</div>
+
+              <div className="p-3.5 rounded-xl bg-[#0B0D14] border border-[#1E2436] flex items-center justify-between">
+                <div>
+                  <div className="text-gray-400 text-[10px] uppercase font-bold">2. Global Load Balancer</div>
+                  <div className="text-white font-semibold">IP: 34.95.121.204 &bull; blockbuster-forwarding-rule</div>
+                </div>
+                <Server className="w-5 h-5 text-purple-400" />
+              </div>
+
+              <div className="text-center text-gray-600">&darr;</div>
+
+              <div className="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-center justify-between">
+                <div>
+                  <div className="text-emerald-400 text-[10px] uppercase font-bold">3. Identity-Aware Proxy (IAP)</div>
+                  <div className="text-emerald-300 font-semibold">BeyondCorp Zero-Trust &bull; roles/iap.httpsResourceAccessor</div>
+                </div>
+                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+              </div>
+
+              <div className="text-center text-gray-600">&darr;</div>
+
+              <div className="p-3.5 rounded-xl bg-[#0B0D14] border border-[#1E2436] flex items-center justify-between">
+                <div>
+                  <div className="text-gray-400 text-[10px] uppercase font-bold">4. Cloud Run Ingress Target</div>
+                  <div className="text-white font-semibold">blockbuster-app (europe-west1) &bull; Ingress: internal-and-cloud-load-balancing</div>
+                </div>
+                <Cpu className="w-5 h-5 text-amber-400" />
+              </div>
+            </div>
+
+            <div className="p-3 bg-indigo-950/30 border border-indigo-500/20 rounded-xl text-xs text-indigo-200">
+              💡 Zero direct internet ingress is permitted to Cloud Run. All requests must validate through Google Cloud Identity-Aware Proxy OIDC tokens.
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowArchModal(false)}
+                className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition"
+              >
+                Close Architecture
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+}

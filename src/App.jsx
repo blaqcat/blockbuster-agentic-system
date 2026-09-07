@@ -17,7 +17,6 @@ import EnterpriseAgentsHub from './components/EnterpriseAgentsHub';
 import AiBreakdownModal from './components/AiBreakdownModal';
 import ExportModal from './components/ExportModal';
 import UserRoleInfoModal from './components/UserRoleInfoModal';
-import AuthGate from './components/AuthGate';
 import IAPLandingPage from './components/IAPLandingPage';
 
 export default function App() {
@@ -30,25 +29,23 @@ export default function App() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showRoleModal, setShowRoleModal] = useState(false);
-  const [showAuthGate, setShowAuthGate] = useState(false);
-
-  if (showAuthGate) {
-  return (
-    <IAPLandingPage 
-      onLoginSuccess={(user) => {
-        if (user.roleId && USER_ROLES[user.roleId]) {
-          setCurrentRoleKey(user.roleId);
-        }
-        setShowAuthGate(false);
-        setSuccessBanner(`✨ Authenticated via Google Cloud IAP as ${user.name} (${user.role})`);
-        setTimeout(() => setSuccessBanner(''), 4000);
-      }}
-    />
-  );
-}
+  const [showAuthGate, setShowAuthGate] = useState(() => {
+    return !localStorage.getItem("blockbuster_auth_user");
+  });
   
   // 4 Levels of Users State
-  const [currentRoleKey, setCurrentRoleKey] = useState('EXECUTIVE_DIRECTOR');
+  const [currentRoleKey, setCurrentRoleKey] = useState(() => {
+    try {
+      const saved = localStorage.getItem("blockbuster_auth_user");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.roleId && USER_ROLES[parsed.roleId]) {
+          return parsed.roleId;
+        }
+      }
+    } catch (e) {}
+    return 'EXECUTIVE_DIRECTOR';
+  });
   const [clientReviews, setClientReviews] = useState(INITIAL_CLIENT_REVIEWS);
 
   const [importScriptText, setImportScriptText] = useState(SCRIPT_PRESETS[0].text);
@@ -227,7 +224,7 @@ export default function App() {
 
   if (showAuthGate) {
     return (
-      <AuthGate 
+      <IAPLandingPage 
         onLoginSuccess={(user) => {
           if (user.roleId && USER_ROLES[user.roleId]) {
             setCurrentRoleKey(user.roleId);
@@ -250,7 +247,10 @@ export default function App() {
         currentRoleKey={currentRoleKey}
         onSelectRole={handleSelectRole}
         onOpenRoleMatrix={() => setShowRoleModal(true)}
-        onSignOut={() => setShowAuthGate(true)}
+        onSignOut={() => {
+          localStorage.removeItem("blockbuster_auth_user");
+          setShowAuthGate(true);
+        }}
       />
 
       {/* Cinematic Level-Aware Welcome Banner */}
