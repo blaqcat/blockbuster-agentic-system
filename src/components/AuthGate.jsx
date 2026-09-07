@@ -1,28 +1,38 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Film, ShieldCheck, Lock, ArrowRight, UserCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  Film, ShieldCheck, Lock, ArrowRight, UserCheck, Sparkles, 
+  CheckCircle2, Users, Star, Eye 
+} from 'lucide-react';
+import { USER_ROLES } from '../services/userRoles';
 
 export default function AuthGate({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [studioPasscode, setStudioPasscode] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [selectedPersonaId, setSelectedPersonaId] = useState('EXECUTIVE_DIRECTOR');
 
-  const handleGoogleSignIn = () => {
+  const handleSelectRoleLogin = (roleId) => {
     setIsLoggingIn(true);
-    // Simulating Google Cloud Identity authentication for the active domain
+    const roleDef = USER_ROLES[roleId] || USER_ROLES.EXECUTIVE_DIRECTOR;
     setTimeout(() => {
       const authUser = {
-        name: "Jerry (Director & Studio Lead)",
-        email: "jerry@djehuti.org",
-        role: "Director / Lead Executive",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
-        authMethod: "Google Workspace Identity (djehuti.org)",
+        name: roleDef.defaultUser.name,
+        email: roleDef.defaultUser.email,
+        roleId: roleDef.id,
+        role: roleDef.title,
+        avatar: roleDef.defaultUser.avatar,
+        authMethod: `Google Cloud Identity (${roleDef.shortTitle})`,
         token: "gcp_iap_" + Math.random().toString(36).substring(2)
       };
       localStorage.setItem("blockbuster_auth_user", JSON.stringify(authUser));
       setIsLoggingIn(false);
       onLoginSuccess(authUser);
-    }, 800);
+    }, 500);
+  };
+
+  const handleGoogleSignIn = () => {
+    handleSelectRoleLogin('EXECUTIVE_DIRECTOR');
   };
 
   const handleStudioPasscodeLogin = (e) => {
@@ -33,11 +43,19 @@ export default function AuthGate({ onLoginSuccess }) {
     }
     setIsLoggingIn(true);
     setTimeout(() => {
+      let matchedRole = 'LEAD_EDITOR';
+      if (email.includes('director') || email.includes('exec')) matchedRole = 'EXECUTIVE_DIRECTOR';
+      else if (email.includes('craft') || email.includes('vfx') || email.includes('sound') || email.includes('color')) matchedRole = 'CRAFT_SUPERVISOR';
+      else if (email.includes('review') || email.includes('client')) matchedRole = 'CLIENT_REVIEWER';
+
+      const roleDef = USER_ROLES[matchedRole];
+
       const authUser = {
         name: email.split('@')[0].toUpperCase(),
         email: email,
-        role: email.includes('director') ? "Director" : "Lead Editor (ACE)",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+        roleId: roleDef.id,
+        role: roleDef.title,
+        avatar: roleDef.defaultUser.avatar,
         authMethod: "Google Cloud Enterprise SSO",
         token: "gcp_auth_" + Date.now()
       };
@@ -48,36 +66,82 @@ export default function AuthGate({ onLoginSuccess }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090E] flex items-center justify-center p-4 font-sans text-gray-100 relative overflow-hidden">
+    <div className="min-h-screen bg-[#07090E] flex items-center justify-center p-4 sm:p-6 font-sans text-gray-100 relative overflow-hidden">
       {/* Cinematic Ambient Glow Background */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-indigo-600/15 blur-[140px] rounded-full pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[250px] bg-cyan-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-indigo-600/15 blur-[150px] rounded-full pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[300px] bg-cyan-600/10 blur-[130px] rounded-full pointer-events-none"></div>
 
-      <div className="relative z-10 max-w-md w-full bg-[#11141E]/90 border border-[#1E2436] rounded-3xl p-8 shadow-2xl backdrop-blur-xl space-y-6">
+      <div className="relative z-10 max-w-2xl w-full bg-[#11141E]/95 border border-[#1E2436] rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
         
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 mb-2 shadow-inner">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 mb-1 shadow-inner">
             <Film className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-white flex items-center justify-center space-x-2">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white flex items-center justify-center space-x-2">
             <span>BLOCKBUSTER</span>
             <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-              IAP
+              IAP Active
             </span>
           </h1>
-          <p className="text-xs text-gray-400">
-            Director &amp; Editorial Intelligence Portal &bull; Google Cloud Identity
+          <p className="text-xs text-gray-400 max-w-md mx-auto">
+            Director &amp; Editorial Intelligence Orchestrator &bull; Google Cloud Identity RBAC
           </p>
         </div>
 
-        {/* Security Badge */}
-        <div className="p-3 rounded-xl bg-[#161B29] border border-[#222B40] flex items-center space-x-3 text-xs text-gray-300">
-          <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
-          <div className="leading-tight">
-            <span className="font-semibold text-white">Identity-Aware Proxy Active</span>
-            <p className="text-[10px] text-gray-400">Sign in with authorized Google Cloud / Studio account</p>
+        {/* 4 Interactive Level Selector Tiles */}
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between">
+            <label className="text-[11px] font-bold text-gray-300 uppercase tracking-wider flex items-center space-x-1.5">
+              <Users className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Select Interactive User Level (1-Click Login)</span>
+            </label>
+            <span className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">
+              4 Levels Configured
+            </span>
           </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {Object.values(USER_ROLES).map((role) => (
+              <button
+                key={role.id}
+                type="button"
+                onClick={() => handleSelectRoleLogin(role.id)}
+                disabled={isLoggingIn}
+                className="text-left p-3 rounded-2xl bg-[#0B0D13]/80 border border-[#1E2436] hover:border-indigo-500/60 hover:bg-[#141824] transition duration-150 flex items-start space-x-3 group relative overflow-hidden active:scale-[0.99]"
+              >
+                <img 
+                  src={role.defaultUser.avatar} 
+                  alt={role.defaultUser.name}
+                  className="w-10 h-10 rounded-full object-cover shrink-0 ring-2 ring-white/10 group-hover:ring-indigo-400/40 transition" 
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center space-x-1.5">
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border uppercase ${role.badgeColor}`}>
+                      L{role.level}
+                    </span>
+                    <span className="text-xs font-bold text-white group-hover:text-indigo-300 transition truncate">
+                      {role.shortTitle}
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-gray-400 font-mono truncate mt-0.5">
+                    {role.defaultUser.name}
+                  </div>
+                  <p className="text-[10px] text-gray-400 line-clamp-1 mt-0.5">
+                    {role.tagline}
+                  </p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-indigo-400 transition self-center shrink-0" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative flex items-center justify-center">
+          <div className="border-t border-[#1E2436] w-full"></div>
+          <span className="bg-[#11141E] px-3 text-[10px] uppercase font-mono tracking-widest text-gray-400">
+            Or Sign In with Google Workspace
+          </span>
         </div>
 
         {/* Google One-Click Login Button */}
@@ -85,12 +149,12 @@ export default function AuthGate({ onLoginSuccess }) {
           <button
             onClick={handleGoogleSignIn}
             disabled={isLoggingIn}
-            className="w-full py-3 px-4 rounded-xl bg-white hover:bg-gray-100 text-gray-900 font-semibold text-xs transition duration-200 flex items-center justify-center space-x-3 shadow-lg shadow-white/5 active:scale-[0.99]"
+            className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-gray-100 text-gray-900 font-semibold text-xs transition duration-200 flex items-center justify-center space-x-3 shadow-lg shadow-white/5 active:scale-[0.99]"
           >
             {isLoggingIn ? (
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
-                <span>Authenticating with Google...</span>
+                <span>Authenticating with Google Cloud IAP...</span>
               </div>
             ) : (
               <>
@@ -100,67 +164,16 @@ export default function AuthGate({ onLoginSuccess }) {
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
                 </svg>
-                <span>Sign In with Google (jerry@djehuti.org)</span>
+                <span>Sign In with Google Cloud SSO (Studio Account)</span>
               </>
             )}
           </button>
         </div>
 
-        <div className="relative flex items-center justify-center">
-          <div className="border-t border-[#1E2436] w-full"></div>
-          <span className="bg-[#11141E] px-3 text-[10px] uppercase font-mono tracking-widest text-gray-400">
-            Or Studio Email
-          </span>
-        </div>
-
-        {/* Manual Studio Email Form */}
-        <form onSubmit={handleStudioPasscodeLogin} className="space-y-3">
-          <div>
-            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-              Studio Workspace Email
-            </label>
-            <input 
-              type="email"
-              placeholder="director@studio.com or editor@ace.org"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-[#0B0D14] border border-[#1E2436] rounded-xl px-3.5 py-2.5 text-xs text-gray-100 placeholder-gray-600 focus:outline-none focus:border-indigo-500 font-mono transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">
-              Production Access Key
-            </label>
-            <input 
-              type="password"
-              placeholder="••••••••••••"
-              value={studioPasscode}
-              onChange={(e) => setStudioPasscode(e.target.value)}
-              className="w-full bg-[#0B0D14] border border-[#1E2436] rounded-xl px-3.5 py-2.5 text-xs text-gray-100 placeholder-gray-600 focus:outline-none focus:border-indigo-500 font-mono transition"
-            />
-          </div>
-
-          {errorMsg && (
-            <div className="text-[11px] text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg p-2.5">
-              {errorMsg}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoggingIn}
-            className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-indigo-600/30"
-          >
-            <span>Enter Studio Workspace</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </form>
-
         {/* Footer info */}
         <div className="pt-2 border-t border-[#1E2436] flex items-center justify-between text-[10px] text-gray-400 font-mono">
           <span>Project: ace-vial-371506</span>
-          <span className="text-indigo-400">Gemini 1.5 Enterprise</span>
+          <span className="text-indigo-400">Gemini 1.5 Enterprise &bull; 4 User Levels</span>
         </div>
       </div>
     </div>

@@ -1,0 +1,63 @@
+steps:
+  # ---------------------------------------------------------------------------
+  # Step 1: Build the multi-stage Docker container image with cache
+  # ---------------------------------------------------------------------------
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-image'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:latest'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:latest'
+      - '.'
+
+  # ---------------------------------------------------------------------------
+  # Step 2: Push the tagged image to Google Cloud Artifact Registry
+  # ---------------------------------------------------------------------------
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-image'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}'
+
+  # ---------------------------------------------------------------------------
+  # Step 3: Deploy the container to Google Cloud Run
+  # ---------------------------------------------------------------------------
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy-cloud-run'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image=${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+      - '--region=${_REGION}'
+      - '--platform=managed'
+      - '--port=8080'
+      - '--allow-unauthenticated'
+      - '--service-account=vertex-express@ace-vial-371506.iam.gserviceaccount.com'
+      - '--set-env-vars=NODE_ENV=production'
+
+# -----------------------------------------------------------------------------
+# Store image metadata in Cloud Build & Artifact Registry
+# -----------------------------------------------------------------------------
+images:
+  - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+  - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:latest'
+
+# -----------------------------------------------------------------------------
+# Substitution Variables
+# -----------------------------------------------------------------------------
+substitutions:
+  _SERVICE_NAME: 'blockbuster'
+  _REGION: 'us-central1'
+  _REPO_NAME: 'cloud-run-source-deploy'
+  _SERVICE_ACCOUNT_EMAIL: 'vertex-express@ace-vial-371506.iam.gserviceaccount.com'
+
+options:
+  logging: 'CLOUD_LOGGING_ONLY'
+  substitution_option: 'ALLOW_LOOSE'
