@@ -54,7 +54,7 @@ images:
 # -----------------------------------------------------------------------------
 substitutions:
   _SERVICE_NAME: 'blockbuster'
-  _REGION: 'us-central1'
+  _REGION: 'europe-west1'
   _REPO_NAME: 'cloud-run-source-deploy'
   _SERVICE_ACCOUNT_EMAIL: 'vertex-express@ace-vial-371506.iam.gserviceaccount.com'
 
