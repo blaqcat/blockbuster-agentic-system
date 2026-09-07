@@ -1,5 +1,6 @@
 {
-  "name": "blockbuster",
+  "name": "train-platform",
+  "description": "Train Platform - Intelligent Post-Production Workflow Orchestrator inspired by the Train Surfers of South Africa",
   "private": true,
   "version": "1.0.0",
   "type": "module",

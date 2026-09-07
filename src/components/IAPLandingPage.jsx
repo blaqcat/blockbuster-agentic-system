@@ -116,17 +116,17 @@ export default function IAPLandingPage({ onLoginSuccess }) {
         {/* Left Column: Studio Brand & Enterprise Intelligence Pitch */}
         <div className="lg:col-span-7 space-y-6">
           <div className="space-y-3">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>Agentic Film Post-Production OS</span>
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Agentic Cinema OS &bull; 🇿🇦 Inspired by Train Surfers of South Africa</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-              BLOCK<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-amber-300">BUSTER</span>
+              TRAIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-indigo-400">PLATFORM</span>
             </h1>
 
             <p className="text-base sm:text-lg text-gray-300 max-w-2xl font-normal leading-relaxed">
-              Synchronize Editorial Cuts across Sound, VFX, Color, and Mastering. Grounded by <strong>Gemini 1.5 Enterprise Multi-Agents</strong>, real-time OpenTimelineIO turnovers, and 4-tier Role-Based Access secured behind Google Cloud Identity-Aware Proxy.
+              Ride the high-velocity rails of film post-production. Synchronize Editorial Cuts across Sound, VFX, Color, and Mastering with split-second precision, grounded by <strong>Gemini 1.5 Enterprise Multi-Agents</strong>, real-time OpenTimelineIO turnovers, and 4-tier Role-Based Access secured behind Google Cloud Identity-Aware Proxy.
             </p>
           </div>
 
@@ -372,7 +372,7 @@ export default function IAPLandingPage({ onLoginSuccess }) {
       {/* Footer */}
       <footer className="bg-[#0B0D13]/90 border-t border-[#1E2436] px-6 py-4 text-xs text-gray-500 text-center relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>&copy; 2026 BLOCKBUSTER Film Intelligence OS. All Rights Reserved.</span>
+          <span>&copy; 2026 Train Platform. Inspired by the Train Surfers of South Africa.</span>
           <span className="font-mono text-[11px] text-gray-400">
             Secured with Google Cloud Identity-Aware Proxy &bull; Project ace-vial-371506
           </span>

@@ -28,10 +28,10 @@ export default function Header({
         </div>
         <div className="min-w-0">
           <div className="flex items-center space-x-1.5 sm:space-x-2">
-            <h1 className="text-sm sm:text-base font-bold text-white tracking-tight truncate">{project.title}</h1>
-            <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-widest px-1.5 sm:px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shrink-0">
-              Agentic
+            <span className="text-[9px] sm:text-[10px] font-black tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/25 px-1.5 py-0.5 rounded shrink-0">
+              TRAIN PLATFORM
             </span>
+            <h1 className="text-sm sm:text-base font-bold text-white tracking-tight truncate">{project.title}</h1>
           </div>
           <p className="text-[10px] sm:text-xs text-gray-400 truncate hidden xs:block sm:block">
             Dir: <span className="text-gray-200">{project.director}</span> &bull; Ed: <span className="text-gray-200">{project.leadEditor}</span>

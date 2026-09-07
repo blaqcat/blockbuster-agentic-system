@@ -1,5 +1,6 @@
 /**
- * 4 Levels of Users for Blockbuster Post-Production Studio Orchestrator
+ * 4 Levels of Users for Train Platform Post-Production Studio Orchestrator
+ * Inspired by the Train Surfers of South Africa
  */
 
 export const USER_ROLES = {

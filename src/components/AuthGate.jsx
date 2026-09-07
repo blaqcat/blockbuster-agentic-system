@@ -79,13 +79,13 @@ export default function AuthGate({ onLoginSuccess }) {
             <Film className="w-7 h-7" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white flex items-center justify-center space-x-2">
-            <span>BLOCKBUSTER</span>
-            <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <span>TRAIN PLATFORM</span>
+            <span className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
               IAP Active
             </span>
           </h1>
           <p className="text-xs text-gray-400 max-w-md mx-auto">
-            Director &amp; Editorial Intelligence Orchestrator &bull; Google Cloud Identity RBAC
+            Director &amp; Editorial Intelligence Orchestrator &bull; Inspired by the Train Surfers of South Africa
           </p>
         </div>
 

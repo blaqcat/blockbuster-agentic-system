@@ -1,8 +1,23 @@
-# Blockbuster 🎬
+# Train Platform 🚆🎬
 ### Intelligent Post-Production Workflow Orchestrator & Multi-Agent Cinema Engine
 
 > **Built for the Google Cloud Agentic Cinema Hackathon ($75k Track)**  
 > Powered by **Google Cloud GenAI (Gemini 1.5)**, **Autonomous Enterprise Multi-Agent Fleet**, **Grafana Telemetry APIs**, **Google Cloud Run**, and **Identity-Aware Proxy (IAP)**.
+
+---
+
+## 🇿🇦 Cultural Inspiration: The Train Surfers of South Africa
+
+**Train Platform** draws its name, ethos, and kinetic energy from the legendary **Train Surfers of South Africa** (*staff riders* / *isitimela*) across Soweto, Katlehong, Umlazi, and Johannesburg commuter rail lines.
+
+In South African youth street culture, train surfing emerged as a dance of radical agility, athletic balance, and split-second precision against immovable physical constraints. Surfers read the speed of the train, anticipate overhead high-voltage electrical cables, duck beneath concrete bridges, and leap between rattling steel cars with absolute synchronicity and calm focus.
+
+**In feature film post-production, a film is a high-speed express train hurtling toward locked festival and theatrical release dates.** Editorial changes in Picture Cut send shockwaves down the line—threatening to derail Sound, VFX shots, Color grading, and Mastering if timing is off by even a fraction of a second.
+
+**Train Platform** is the staging ground, switching yard, and telemetry deck built for post-production teams riding these high-velocity creative rails:
+- **Kinetic Agility:** Rapid screenplay ingestion and real-time timeline refactoring without breaking stride or losing cut momentum.
+- **Split-Second Synchronization:** Gemini Enterprise Agents acting as watchful lookouts across coupled departments, anticipating bottlenecks before they derail the turnover.
+- **Defiant Precision:** Unwavering focus under relentless release deadlines, transforming complex post-production chaos into an exhilarating, unified cinematic delivery.
 
 ---
 
@@ -22,7 +37,7 @@
 
 Film and television editing is fundamentally an intuitive, nonlinear craft. Because editors and directors need to "feel" their way through rhythm, pacing, and emotional resonance, post-production is notoriously difficult to systematize. A delay in **Picture Editing** ripples downstream into **Sound Post**, **VFX**, **Color Grading**, and **Mastering & QC**, leading to costly turnaround delays and missed festival deadlines.
 
-**Blockbuster** accelerates and synchronizes the entire post-production pipeline by:
+**Train Platform** accelerates and synchronizes the entire post-production pipeline by:
 1. Parsing screenplays (in **PDF**, **DOCX**, **Fountain**, or text format) and segmenting them into **Acts**, **Scenes**, page counts, and estimated runtimes.
 2. Maintaining real-time multi-department synchronization across all 5 primary post-production pillars.
 3. Deploying **Gemini Enterprise Agents** to autonomously audit department progress, enforce turnaround SLAs, and dispatch targeted alerts to Google Chat / Slack.
@@ -33,7 +48,7 @@ Film and television editing is fundamentally an intuitive, nonlinear craft. Beca
 
 ## 🤖 Gemini Enterprise Multi-Agent Architecture & Agent Mapping
 
-Blockbuster uses a hierarchical **Autonomous Multi-Agent System** powered by Google Cloud GenAI (Gemini) to monitor every scene and trigger automated reminders:
+**Train Platform** uses a hierarchical **Autonomous Multi-Agent System** powered by Google Cloud GenAI (Gemini) to monitor every scene and trigger automated reminders:
 
 ```
                   ┌────────────────────────────────────────┐

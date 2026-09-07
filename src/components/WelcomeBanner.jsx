@@ -57,7 +57,7 @@ export default function WelcomeBanner({
         return {
           badge: "Director Studio Operating System",
           title: `Welcome, ${project.director} & ${project.leadEditor}`,
-          description: "Blockbuster synchronizes your editorial cut with Sound, VFX, Color, and Mastering. Ingest screenplays in PDF/DOCX format or audit schedule with Gemini Enterprise Multi-Agents.",
+          description: "Train Platform synchronizes your editorial cut with Sound, VFX, Color, and Mastering. Ingest screenplays in PDF/DOCX format or audit schedule with Gemini Enterprise Multi-Agents.",
           primaryBtn: "Import PDF / DOCX",
           onPrimary: onOpenImport
         };
