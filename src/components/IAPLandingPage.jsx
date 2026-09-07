@@ -3,9 +3,10 @@ import {
   Film, ShieldCheck, Lock, ArrowRight, UserCheck, Sparkles, 
   CheckCircle2, Users, Star, Eye, Zap, Bot, Clapperboard, 
   SlidersHorizontal, Radio, Shield, Server, FileText, ChevronRight,
-  Network, Cpu, Globe, KeyRound, ExternalLink, X
+  Network, Cpu, Globe, KeyRound, ExternalLink, X, HelpCircle
 } from 'lucide-react';
 import { USER_ROLES } from '../services/userRoles';
+import OnboardingGuideModal from './OnboardingGuideModal';
 
 export default function IAPLandingPage({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
@@ -13,6 +14,7 @@ export default function IAPLandingPage({ onLoginSuccess }) {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [selectedPersonaId, setSelectedPersonaId] = useState('EXECUTIVE_DIRECTOR');
   const [showArchModal, setShowArchModal] = useState(false);
+  const [showGuideModal, setShowGuideModal] = useState(false);
 
   const handleSelectRoleLogin = (roleId) => {
     setIsLoggingIn(true);
@@ -95,6 +97,15 @@ export default function IAPLandingPage({ onLoginSuccess }) {
         </div>
 
         <div className="flex items-center space-x-2 sm:space-x-3 text-[11px] font-mono shrink-0">
+          <button 
+            onClick={() => setShowGuideModal(true)}
+            className="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:text-amber-200 transition"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden xs:inline">First-Time Guide</span>
+            <span className="xs:hidden">Guide</span>
+          </button>
+
           <button 
             onClick={() => setShowArchModal(true)}
             className="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded bg-[#1A2030] hover:bg-indigo-950/80 border border-[#2C344B] text-indigo-300 hover:text-indigo-200 transition"
@@ -457,6 +468,14 @@ export default function IAPLandingPage({ onLoginSuccess }) {
           </div>
         </div>
       )}
+
+      {/* First-Time User Navigation Guide Modal */}
+      <OnboardingGuideModal 
+        show={showGuideModal}
+        onClose={() => setShowGuideModal(false)}
+        currentRoleKey={selectedPersonaId}
+        onSelectRole={setSelectedPersonaId}
+      />
     </div>
   );
 }

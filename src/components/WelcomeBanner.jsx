@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Clapperboard, Sparkles, BarChart3, Upload, ChevronRight, X, 
-  AlertCircle, ShieldCheck, Film, Eye, Users, ArrowRight
+  AlertCircle, ShieldCheck, Film, Eye, Users, ArrowRight, HelpCircle
 } from 'lucide-react';
 import { USER_ROLES } from '../services/userRoles';
 
@@ -11,7 +11,8 @@ export default function WelcomeBanner({
   onNavigateToAnalytics, 
   onNavigateToMatrix,
   currentRoleKey,
-  onOpenRoleMatrix 
+  onOpenRoleMatrix,
+  onOpenGuide
 }) {
   const [dismissed, setDismissed] = useState(false);
 
@@ -112,6 +113,16 @@ export default function WelcomeBanner({
 
         {/* Action CTAs */}
         <div className="flex flex-wrap items-center gap-2.5">
+          {onOpenGuide && (
+            <button
+              onClick={onOpenGuide}
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white text-xs font-semibold border border-amber-500/30 transition shadow-sm"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+              <span>Platform Guide</span>
+            </button>
+          )}
+
           <button
             onClick={onOpenRoleMatrix}
             className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-[#1E2333] hover:bg-[#2C344B] text-indigo-300 hover:text-white text-xs font-semibold border border-[#2C344B] transition"

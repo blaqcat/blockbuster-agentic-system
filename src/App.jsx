@@ -17,6 +17,7 @@ import EnterpriseAgentsHub from './components/EnterpriseAgentsHub';
 import AiBreakdownModal from './components/AiBreakdownModal';
 import ExportModal from './components/ExportModal';
 import UserRoleInfoModal from './components/UserRoleInfoModal';
+import OnboardingGuideModal from './components/OnboardingGuideModal';
 import IAPLandingPage from './components/IAPLandingPage';
 
 export default function App() {
@@ -29,6 +30,9 @@ export default function App() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showRoleModal, setShowRoleModal] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    return localStorage.getItem("train_platform_onboarding_completed") !== "true";
+  });
   const [showAuthGate, setShowAuthGate] = useState(() => {
     return !localStorage.getItem("blockbuster_auth_user");
   });
@@ -247,6 +251,7 @@ export default function App() {
         currentRoleKey={currentRoleKey}
         onSelectRole={handleSelectRole}
         onOpenRoleMatrix={() => setShowRoleModal(true)}
+        onOpenGuide={() => setShowOnboarding(true)}
         onSignOut={() => {
           localStorage.removeItem("blockbuster_auth_user");
           setShowAuthGate(true);
@@ -261,6 +266,7 @@ export default function App() {
         onNavigateToMatrix={() => setActiveTab('matrix')}
         currentRoleKey={currentRoleKey}
         onOpenRoleMatrix={() => setShowRoleModal(true)}
+        onOpenGuide={() => setShowOnboarding(true)}
       />
 
       {/* Success Notification Banner */}
@@ -469,6 +475,15 @@ export default function App() {
         onClose={() => setShowRoleModal(false)}
         currentRoleKey={currentRoleKey}
         onSelectRole={handleSelectRole}
+      />
+
+      {/* First-Time User Guidance & Onboarding Tour */}
+      <OnboardingGuideModal 
+        show={showOnboarding}
+        onClose={() => setShowOnboarding(false)}
+        currentRoleKey={currentRoleKey}
+        onSelectRole={handleSelectRole}
+        onNavigateTab={setActiveTab}
       />
     </div>
   );

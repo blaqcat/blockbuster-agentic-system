@@ -1,5 +1,5 @@
 import React from 'react';
-import { Film, Clapperboard, Download, Upload, Zap, ShieldCheck, LogOut, User, Sparkles, Layers } from 'lucide-react';
+import { Film, Clapperboard, Download, Upload, Zap, ShieldCheck, LogOut, User, Sparkles, Layers, HelpCircle } from 'lucide-react';
 import UserRoleSwitcher from './UserRoleSwitcher';
 import { USER_ROLES } from '../services/userRoles';
 
@@ -10,6 +10,7 @@ export default function Header({
   currentRoleKey,
   onSelectRole,
   onOpenRoleMatrix,
+  onOpenGuide,
   onSignOut 
 }) {
   const totalScenes = project.scenes.length;
@@ -57,6 +58,18 @@ export default function Header({
           onSelectRole={onSelectRole}
           onOpenRoleMatrix={onOpenRoleMatrix}
         />
+
+        {/* First-Time & Ongoing Platform Guide Tour */}
+        {onOpenGuide && (
+          <button 
+            onClick={onOpenGuide}
+            className="flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 transition active:scale-95"
+            title="Train Platform Navigation Guide & Tour"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Guide</span>
+          </button>
+        )}
 
         {/* Action Buttons based on Role Permissions */}
         {canImport && (
