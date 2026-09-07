@@ -9,7 +9,7 @@ steps:
       - '--cache-from'
       - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:latest'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${_COMMIT_SHA}'
       - '-t'
       - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:latest'
       - '.'
@@ -21,7 +21,7 @@ steps:
     id: 'push-image'
     args:
       - 'push'
-      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+      - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${_COMMIT_SHA}'
 
   - name: 'gcr.io/cloud-builders/docker'
     id: 'push-image-latest'
@@ -39,7 +39,7 @@ steps:
       - 'run'
       - 'deploy'
       - '${_SERVICE_NAME}'
-      - '--image=${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+      - '--image=${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${_COMMIT_SHA}'
       - '--region=${_REGION}'
       - '--platform=managed'
       - '--port=8080'
@@ -51,14 +51,14 @@ steps:
 # Store image metadata in Cloud Build & Artifact Registry
 # -----------------------------------------------------------------------------
 images:
-  - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${COMMIT_SHA}'
+  - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:${_COMMIT_SHA}'
   - '${_REGION}-docker.pkg.dev/ace-vial-371506/${_REPO_NAME}/${_SERVICE_NAME}:latest'
 
 # -----------------------------------------------------------------------------
 # Substitution Variables
 # -----------------------------------------------------------------------------
 substitutions:
-  COMMIT_SHA: 'latest'
+  _COMMIT_SHA: 'latest'
   _SERVICE_NAME: 'blockbuster-app'
   _REGION: 'europe-west1'
   _REPO_NAME: 'cloud-run-source-deploy'
