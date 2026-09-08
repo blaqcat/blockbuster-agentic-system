@@ -2,7 +2,8 @@
 ### Intelligent Post-Production Workflow Orchestrator & Multi-Agent Cinema Engine
 
 > **Built for the Google Cloud Agentic Cinema Hackathon ($75k Track)**  
-> Powered by **Google Cloud GenAI (Gemini 1.5)**, **Autonomous Enterprise Multi-Agent Fleet**, **Grafana Telemetry APIs**, **Google Cloud Run**, and **Identity-Aware Proxy (IAP)**.
+> Powered by **Google Cloud GenAI (Gemini 1.5)**, **Autonomous Enterprise Multi-Agent Fleet**, **Grafana Telemetry APIs**, **Google Cloud Run**, and **Identity-Aware Proxy (IAP)**.  
+> 📄 Read the complete project story & hackathon submission in **[`SUBMISSION.md`](SUBMISSION.md)**.
 
 ---
 
@@ -143,6 +144,37 @@ npm run dev
 ```
 
 Open **`http://localhost:3000`** in your browser.
+
+---
+
+## 🛠️ Built With / Technologies Used
+
+| Layer / Category | Technology / Tool | Purpose & Usage in Train Platform |
+| :--- | :--- | :--- |
+| **Foundation Models & AI** | **Google Cloud Gemini 1.5 Pro** | Deep contextual screenplay breakdown, character emotional arc parsing, and multi-scene narrative analysis. |
+| **Foundation Models & AI** | **Google Cloud Gemini 1.5 Flash** | Low-latency autonomous agent audits, turnaround calculations, and real-time SLA reminder evaluations. |
+| **AI Orchestration** | **`@google/generative-ai` SDK** | Client & edge SDK integrating Gemini multimodal models with custom schema formatting. |
+| **Multi-Agent Engine** | **Autonomous Sentry Fleet** | 6-agent hierarchy (Supervisor, Picture Sentry, Sound Dispatcher, VFX Warden, Color Auditor, QC Inspector). |
+| **Cloud Compute & Hosting** | **Google Cloud Run (Serverless)** | Containerized microservices hosting the web OS with sub-second scale-to-zero (`europe-west1`). |
+| **Continuous Delivery** | **Google Cloud Build** | Automated CI/CD container image creation and blue/green production deployment via service account `vertex-express@ace-vial-371506.iam.gserviceaccount.com`. |
+| **Containerization** | **Docker & Alpine Linux** | Multi-stage production container with minimal attack surface (`nginx:alpine`). |
+| **Zero-Trust Security** | **Google Cloud Identity-Aware Proxy (IAP)** | BeyondCorp enterprise zero-trust perimeter enforcing OIDC token verification (`roles/iap.httpsResourceAccessor`). |
+| **Cloud Networking** | **Google Cloud External HTTPS Load Balancer** | Global Anycast IP routing (`34.95.121.204`) with managed SSL/TLS termination and DDoS mitigation. |
+| **Cloud Networking** | **Serverless Network Endpoint Groups (NEG)** | `blockbuster-neg` bridging the Global External Load Balancer backend service to regional Cloud Run instances. |
+| **Identity & Access** | **Google Cloud IAM & Service Accounts** | Fine-grained programmatic credentials and role separation across build, runtime, and proxy layers. |
+| **Frontend Framework** | **React 19** | Core reactive UI state machine, declarative rendering, and interactive component hierarchy. |
+| **Build Tool & Bundler** | **Vite 6** | Instant HMR development server, optimized ESM bundling, and Rollup production minification. |
+| **Styling & Design System** | **Tailwind CSS 3** | High-performance atomic utility styling with custom dark-mode cinema aesthetic and glassmorphism. |
+| **Iconography & UI Assets** | **Lucide React** | Scalable SVG iconography for film reels, clapperboards, agents, timelines, and security badges. |
+| **Data Visualization** | **HTML5 Canvas 2D API** | Custom dynamic 5-axis readiness radar visualization and milestone velocity curves. |
+| **Cinema Interoperability** | **OpenTimelineIO (`.otio`)** | Universal NLE interchange schema export for DaVinci Resolve, Adobe Premiere Pro, and Avid Media Composer. |
+| **Cinema Interoperability** | **Final Cut Pro XML (`.fcpxml`)** | Sequence interchange standard for Apple FCP and legacy editorial suites. |
+| **Document Ingestion** | **Mammoth.js (`mammoth`)** | In-browser binary extraction of `.docx` Word screenplay documents to raw text tokens. |
+| **Screenplay Formatting** | **Fountain Screenplay Spec** | Standard screenplay plaintext tokenization for sluglines, character dialogue, and parentheticals. |
+| **Webhook Integrations** | **Google Chat Webhook API** | Real-time automated card dispatches for team reminders and stalled cut alerts. |
+| **Webhook Integrations** | **Slack Incoming Webhooks** | Real-time channel notifications for cross-department milestone turnovers. |
+| **Version Control & Dev** | **Git & GitHub** | Source control, issue tracking, and repository hosting at `blaqcat/blockbuster-agentic-system`. |
+| **Runtime Environment** | **Node.js (v20+ LTS) & npm** | Package resolution, build execution, and module dependency graph management. |
 
 ---
 

@@ -186,3 +186,101 @@ export const DEPARTMENTS = [
   { id: "color", name: "Color & Grading", icon: "Palette", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30" },
   { id: "mastering", name: "Mastering & QC", icon: "CheckCircle2", color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/30" },
 ];
+
+export const INITIAL_DIRECTOR_BOARD_NOTES = [
+  {
+    id: "db_note_1",
+    title: "Act I Picture Lock Mandate & Pacing Target",
+    content: "Editorial & Sound: Scene 1 is officially LOCKED. Joe, please ensure the 8-frame monitor cutaway trim in Scene 2 preserves Dr. Arlo's eye-line before turning over to Foley and Sound design. All departments can treat Scene 1 as final picture reference for delivery.",
+    author: "Jerry Vance",
+    authorRole: "Executive Director (L1)",
+    authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    targetDepartment: "EDITORIAL",
+    priority: "CRITICAL",
+    pinned: true,
+    sceneTag: "Act I (Scenes 1-2)",
+    createdAt: "Today at 09:15 AM",
+    acknowledgments: [
+      { userName: "Joe Walker, ACE", roleTitle: "Lead Picture Editor (L2)", timestamp: "09:30 AM" },
+      { userName: "Elena Rostov", roleTitle: "Department Craft Supervisor (L3)", timestamp: "09:42 AM" }
+    ],
+    replies: [
+      {
+        id: "rep_1",
+        author: "Joe Walker, ACE",
+        role: "Lead Picture Editor",
+        text: "Understood Jerry. Trims verified against 24fps master timeline. EDL exported to Sound.",
+        timestamp: "09:32 AM"
+      }
+    ]
+  },
+  {
+    id: "db_note_2",
+    title: "VFX Orbital Earth Composite Turnaround Window",
+    content: "VFX Team: Scene 3 (Stratosphere separation) currently has 8 of 16 shots approved. For the zero-g booster staging, let's keep the earth horizon curvature slightly dimmer so the rocket plasma flame remains the dominant high-dynamic-range hero element. We need v04 plates in review by Thursday.",
+    author: "Jerry Vance",
+    authorRole: "Executive Director (L1)",
+    authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    targetDepartment: "VFX",
+    priority: "HIGH",
+    pinned: true,
+    sceneTag: "Scene 3 (Act IIA)",
+    createdAt: "Today at 11:20 AM",
+    acknowledgments: [
+      { userName: "Elena Rostov", roleTitle: "Department Craft Supervisor (L3)", timestamp: "11:45 AM" }
+    ],
+    replies: [
+      {
+        id: "rep_2",
+        author: "Elena Rostov",
+        role: "VFX Supervisor",
+        text: "Plate pulls for shot 09 and 12 are queued in Nuke. Comp passes will be uploaded to screening room at 4 PM.",
+        timestamp: "11:50 AM"
+      }
+    ]
+  },
+  {
+    id: "db_note_3",
+    title: "Dolby Atmos Sub-Harmonic Mix Directives for Launch Sequence",
+    content: "Sound Department: During Scene 1 rocket ignition, keep the sub-bass rumble tight below 40Hz. When the staging separation cut occurs in Scene 3, I want an absolute dead drop in audio silence for 1.5 seconds before the mission AI voice comes in. High contrast is key to the emotional punch.",
+    author: "Jerry Vance",
+    authorRole: "Executive Director (L1)",
+    authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    targetDepartment: "SOUND",
+    priority: "CREATIVE",
+    pinned: false,
+    sceneTag: "Scene 1 & Scene 3",
+    createdAt: "Yesterday at 04:10 PM",
+    acknowledgments: [
+      { userName: "Elena Rostov", roleTitle: "Department Craft Supervisor (L3)", timestamp: "Yesterday at 04:30 PM" }
+    ],
+    replies: []
+  },
+  {
+    id: "db_note_4",
+    title: "Studio Executive Screening & Milestone Sign-Off Window",
+    content: "All Departments & Studio Clients: Clara Sterling and Warner distribution team will screen the Act I & Act II assembly cut this Friday at 3:00 PM PST. Please ensure all approved fine cuts and current VFX work-in-progress plates are checked in by noon Friday.",
+    author: "Jerry Vance",
+    authorRole: "Executive Director (L1)",
+    authorAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+    targetDepartment: "ALL",
+    priority: "MILESTONE",
+    pinned: false,
+    sceneTag: "Full Timeline Assembly",
+    createdAt: "Yesterday at 02:00 PM",
+    acknowledgments: [
+      { userName: "Clara Sterling", roleTitle: "Studio Executive (L4)", timestamp: "Yesterday at 02:15 PM" },
+      { userName: "Joe Walker, ACE", roleTitle: "Lead Picture Editor (L2)", timestamp: "Yesterday at 02:30 PM" }
+    ],
+    replies: [
+      {
+        id: "rep_3",
+        author: "Clara Sterling",
+        role: "Studio Executive",
+        text: "Looking forward to screening the updated color pass and the new sound mix!",
+        timestamp: "Yesterday at 02:20 PM"
+      }
+    ]
+  }
+];
+

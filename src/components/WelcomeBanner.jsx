@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Clapperboard, Sparkles, BarChart3, Upload, ChevronRight, X, 
-  AlertCircle, ShieldCheck, Film, Eye, Users, ArrowRight, HelpCircle
+  AlertCircle, ShieldCheck, Film, Eye, Users, ArrowRight, HelpCircle, Pin, Bot
 } from 'lucide-react';
 import { USER_ROLES } from '../services/userRoles';
 
@@ -10,6 +10,8 @@ export default function WelcomeBanner({
   onOpenImport, 
   onNavigateToAnalytics, 
   onNavigateToMatrix,
+  onNavigateToBoard,
+  onNavigateToDirectorAi,
   currentRoleKey,
   onOpenRoleMatrix,
   onOpenGuide
@@ -113,10 +115,32 @@ export default function WelcomeBanner({
 
         {/* Action CTAs */}
         <div className="flex flex-wrap items-center gap-2.5">
+          {onNavigateToBoard && (
+            <button
+              onClick={onNavigateToBoard}
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white text-xs font-semibold border border-amber-500/30 transition shadow-sm"
+              title="View Public Board of Directors Notes"
+            >
+              <Pin className="w-3.5 h-3.5 text-amber-400" />
+              <span>Directors' Board</span>
+            </button>
+          )}
+
+          {onNavigateToDirectorAi && (
+            <button
+              onClick={onNavigateToDirectorAi}
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 hover:text-white text-xs font-semibold border border-indigo-500/30 transition shadow-sm"
+              title="Open Director AI Overview Copilot"
+            >
+              <Bot className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Director AI</span>
+            </button>
+          )}
+
           {onOpenGuide && (
             <button
               onClick={onOpenGuide}
-              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 hover:text-white text-xs font-semibold border border-amber-500/30 transition shadow-sm"
+              className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-[#1E2333] hover:bg-[#2C344B] text-gray-300 hover:text-white text-xs font-semibold border border-[#2C344B] transition shadow-sm"
             >
               <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
               <span>Platform Guide</span>

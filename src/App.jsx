@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Layers, SlidersHorizontal, FileText, MessageSquare, Search, 
-  CheckCircle2, BarChart3, Bot, BellRing, Sparkles, UserCheck 
+  CheckCircle2, BarChart3, Bot, BellRing, Sparkles, UserCheck, Pin 
 } from 'lucide-react';
-import { INITIAL_PROJECT, SCRIPT_PRESETS } from './mockData';
+import { INITIAL_PROJECT, SCRIPT_PRESETS, INITIAL_DIRECTOR_BOARD_NOTES } from './mockData';
 import { USER_ROLES, INITIAL_CLIENT_REVIEWS } from './services/userRoles';
 import { analyzeScriptWithGemini } from './geminiService';
 import Header from './components/Header';
@@ -12,6 +12,7 @@ import MasterMatrix from './components/MasterMatrix';
 import DepartmentKanban from './components/DepartmentKanban';
 import ScriptBeats from './components/ScriptBeats';
 import DirectorHub from './components/DirectorHub';
+import DirectorNotesBoard from './components/DirectorNotesBoard';
 import DirectorAnalytics from './components/DirectorAnalytics';
 import EnterpriseAgentsHub from './components/EnterpriseAgentsHub';
 import AiBreakdownModal from './components/AiBreakdownModal';
@@ -51,6 +52,73 @@ export default function App() {
     return 'EXECUTIVE_DIRECTOR';
   });
   const [clientReviews, setClientReviews] = useState(INITIAL_CLIENT_REVIEWS);
+  const [directorBoardNotes, setDirectorBoardNotes] = useState(() => {
+    try {
+      const saved = localStorage.getItem("blockbuster_director_board_notes");
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return INITIAL_DIRECTOR_BOARD_NOTES;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("blockbuster_director_board_notes", JSON.stringify(directorBoardNotes));
+    } catch (e) {}
+  }, [directorBoardNotes]);
+
+  const handleAddBoardNote = (newNote) => {
+    setDirectorBoardNotes(prev => [newNote, ...prev]);
+    setSuccessBanner(`📢 Directive "${newNote.title}" published to the Board of Directors Notes.`);
+    setTimeout(() => setSuccessBanner(''), 4500);
+  };
+
+  const handleDeleteBoardNote = (noteId) => {
+    setDirectorBoardNotes(prev => prev.filter(n => n.id !== noteId));
+    setSuccessBanner("🗑️ Board directive removed.");
+    setTimeout(() => setSuccessBanner(''), 3000);
+  };
+
+  const handleTogglePinBoardNote = (noteId) => {
+    setDirectorBoardNotes(prev => prev.map(n => {
+      if (n.id === noteId) {
+        return { ...n, pinned: !n.pinned };
+      }
+      return n;
+    }));
+  };
+
+  const handleAcknowledgeBoardNote = (noteId, userName, roleTitle) => {
+    setDirectorBoardNotes(prev => prev.map(n => {
+      if (n.id === noteId) {
+        const alreadyAcked = (n.acknowledgments || []).some(a => a.userName === userName);
+        if (alreadyAcked) return n;
+        return {
+          ...n,
+          acknowledgments: [
+            ...(n.acknowledgments || []),
+            { userName, roleTitle, timestamp: "Today, " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+          ]
+        };
+      }
+      return n;
+    }));
+    setSuccessBanner(`✅ Acknowledged Board Directive for ${userName}`);
+    setTimeout(() => setSuccessBanner(''), 3000);
+  };
+
+  const handleAddBoardNoteReply = (noteId, reply) => {
+    setDirectorBoardNotes(prev => prev.map(n => {
+      if (n.id === noteId) {
+        return {
+          ...n,
+          replies: [...(n.replies || []), reply]
+        };
+      }
+      return n;
+    }));
+    setSuccessBanner("💬 Reply added to Board Directive thread.");
+    setTimeout(() => setSuccessBanner(''), 3000);
+  };
 
   const [importScriptText, setImportScriptText] = useState(SCRIPT_PRESETS[0].text);
   const [geminiApiKey, setGeminiApiKey] = useState('');
@@ -264,6 +332,8 @@ export default function App() {
         onOpenImport={() => setShowImportModal(true)}
         onNavigateToAnalytics={() => setActiveTab('analytics')}
         onNavigateToMatrix={() => setActiveTab('matrix')}
+        onNavigateToBoard={() => setActiveTab('board')}
+        onNavigateToDirectorAi={() => setActiveTab('review')}
         currentRoleKey={currentRoleKey}
         onOpenRoleMatrix={() => setShowRoleModal(true)}
         onOpenGuide={() => setShowOnboarding(true)}
@@ -321,6 +391,21 @@ export default function App() {
           </button>
 
           <button
+            onClick={() => setActiveTab('board')}
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
+              activeTab === 'board' 
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' 
+                : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
+            }`}
+          >
+            <Pin className="w-3.5 h-3.5 text-amber-400" />
+            <span>Directors' Board</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-[#0B0D13] text-amber-300 border border-amber-500/30">
+              {directorBoardNotes.length}
+            </span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('review')}
             className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 ${
               activeTab === 'review' 
@@ -328,8 +413,8 @@ export default function App() {
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
             }`}
           >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>Director Hub</span>
+            <Bot className="w-3.5 h-3.5 text-indigo-400" />
+            <span>Director Hub &amp; AI</span>
           </button>
 
           <button
@@ -340,7 +425,7 @@ export default function App() {
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#1E2333]/50'
             }`}
           >
-            <Bot className="w-3.5 h-3.5 text-indigo-400" />
+            <BellRing className="w-3.5 h-3.5 text-indigo-400" />
             <span>Agents (Reminders)</span>
           </button>
 
@@ -384,6 +469,30 @@ export default function App() {
         </div>
       </div>
 
+      {/* Pinned Director Directive Broadcast Ticker */}
+      {directorBoardNotes.find(n => n.pinned) && activeTab !== 'board' && (
+        <div className="bg-[#121620] border-b border-amber-500/30 px-3 sm:px-6 py-2 flex items-center justify-between text-xs">
+          <div className="flex items-center space-x-2.5 overflow-hidden min-w-0">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 flex items-center space-x-1">
+              <Pin className="w-3 h-3 text-amber-400" />
+              <span>DIRECTOR MANDATE</span>
+            </span>
+            <span className="text-gray-200 font-semibold truncate shrink-0">
+              {directorBoardNotes.find(n => n.pinned)?.title}:
+            </span>
+            <span className="text-gray-400 truncate hidden md:inline">
+              {directorBoardNotes.find(n => n.pinned)?.content}
+            </span>
+          </div>
+          <button
+            onClick={() => setActiveTab('board')}
+            className="text-amber-400 hover:text-amber-300 text-xs font-semibold underline shrink-0 ml-3"
+          >
+            View Board &rarr;
+          </button>
+        </div>
+      )}
+
       {/* Main Content Viewport */}
       <main className="flex-1 p-3 sm:p-6 overflow-y-auto">
         {activeTab === 'matrix' && (
@@ -421,6 +530,19 @@ export default function App() {
           />
         )}
 
+        {activeTab === 'board' && (
+          <DirectorNotesBoard 
+            boardNotes={directorBoardNotes}
+            onAddBoardNote={handleAddBoardNote}
+            onDeleteBoardNote={handleDeleteBoardNote}
+            onTogglePinBoardNote={handleTogglePinBoardNote}
+            onAcknowledgeBoardNote={handleAcknowledgeBoardNote}
+            onAddReplyToBoardNote={handleAddBoardNoteReply}
+            currentRoleKey={currentRoleKey}
+            project={project}
+          />
+        )}
+
         {activeTab === 'review' && (
           <DirectorHub 
             project={project} 
@@ -430,6 +552,13 @@ export default function App() {
             clientReviews={clientReviews}
             onAddClientReview={handleAddClientReview}
             currentRoleKey={currentRoleKey}
+            boardNotes={directorBoardNotes}
+            onAddBoardNote={handleAddBoardNote}
+            onDeleteBoardNote={handleDeleteBoardNote}
+            onTogglePinBoardNote={handleTogglePinBoardNote}
+            onAcknowledgeBoardNote={handleAcknowledgeBoardNote}
+            onAddReplyToBoardNote={handleAddBoardNoteReply}
+            geminiApiKey={geminiApiKey}
           />
         )}
 
