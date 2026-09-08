@@ -150,3 +150,14 @@ Train Platform was engineered with modern cloud-native architecture, robust agen
 - 🧠 **Multimodal Cut Auditing with Gemini 1.5 Pro Video**: Uploading rendered cut exports directly to Gemini to automatically detect flash frames, audio sync slip, black frames, and VFX composite dropouts before director screening.
 - 📦 **Automated Vendor Pull Packages**: Automatically generating EDL/XML pull sheets and packaging camera raw files into cloud transfer buckets for VFX facilities.
 - 🌍 **Empowering African & Independent Filmmakers**: Partnering with African film festivals, universities, and independent filmmaker collectives to provide free access to Train Platform, democratizing high-end studio orchestration tools for emerging storytellers worldwide.
+
+---
+
+## 👥 Core Team & Contributors
+
+| Contributor | Role & Domain | Responsibilities in Train Platform |
+| :--- | :--- | :--- |
+| **Jerry Monyelo** | **Cloud Architect & Developer** | GCP Architecture (Cloud Run, IAP, Global External Load Balancer, Serverless NEG), Gemini Multi-Agent Fleet, App Engineering & React Orchestrator |
+| **Sakhile Gumbi** | **Film Director** | Directorial Vision, Production Cadence Workflows, Script-to-Screen Analysis, and Director AI Agent Persona Design |
+| **Siyanda Nzimande** | **Film Editor** | Picture Editorial Pacing, Cut Stage Transitions (Assembly to Lock), NLE Interchange Specs (OTIO/FCPXML), and Post-Production Logic |
+| **Trevor Mkandla** | **Graphics & Video** | UI/UX Cinema Aesthetic, VFX Shot Telemetry, Graphic Assets, Dark-Mode Glassmorphism Design, and Video Production |

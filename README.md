@@ -210,6 +210,17 @@ Open **`http://localhost:3000`** in your browser.
 
 ---
 
+## 👥 Core Team & Contributors
+
+| Contributor | Role & Domain | Responsibilities in Train Platform |
+| :--- | :--- | :--- |
+| **Jerry Monyelo** | **Cloud Architect & Developer** | GCP Architecture (Cloud Run, IAP, Global External Load Balancer, Serverless NEG), Gemini Multi-Agent Fleet, App Engineering & React Orchestrator |
+| **Sakhile Gumbi** | **Film Director** | Directorial Vision, Production Cadence Workflows, Script-to-Screen Analysis, and Director AI Agent Persona Design |
+| **Siyanda Nzimande** | **Film Editor** | Picture Editorial Pacing, Cut Stage Transitions (Assembly to Lock), NLE Interchange Specs (OTIO/FCPXML), and Post-Production Logic |
+| **Trevor Mkandla** | **Graphics & Video** | UI/UX Cinema Aesthetic, VFX Shot Telemetry, Graphic Assets, Dark-Mode Glassmorphism Design, and Video Production |
+
+---
+
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details. Built for the Google Cloud Agentic Cinema Hackathon.
