@@ -11,17 +11,21 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Stage 2: Serve with NGINX Alpine
-FROM nginx:alpine
+# Stage 2: Serve with Node 20 runtime on Cloud Run (Auto-authenticates with GCP Service Account Metadata)
+FROM node:20-alpine
 
-# Copy built assets to NGINX html directory
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
+ENV NODE_ENV=production
 
-# Copy custom NGINX configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-# Support custom dynamic PORT passed by Cloud Run
+# Copy compiled static assets and server code
+COPY --from=builder /app/dist ./dist
+COPY server.js ./
+COPY src/services/directorAgentService.js ./src/services/directorAgentService.js
+
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["sh", "-c", "sed -i 's/listen 8080;/listen '\"$PORT\"';/g' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+CMD ["node", "server.js"]

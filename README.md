@@ -102,9 +102,17 @@ Film and television editing is fundamentally an intuitive, nonlinear craft. Beca
     - *Sound Post:* Dialogue stem freezing, Foley, Atmos spatial mixing, and holds caused by unlocked picture cuts.
     - *Color / DI:* ACEScc/Rec.709 LUT conforms (e.g. Kodak 5219, Teal & Orange), CRT phosphor balancing, and lock holds.
     - *Mastering & QC:* DCI specs, IMF packaging readiness, and audio loudness compliance (-24 LKFS).
-- **Inline API Key Connector**:
-  - One-click **"🔑 Connect API Key"** modal right in the chat header with instant validation and `localStorage` persistence.
-  - Supports live Google AI Studio API keys or seamless offline dynamic simulation fallback.
+- **Enterprise ADC & API Key Connector**:
+  - **Organization-Compliant Application Default Credentials (ADC)**: When raw API keys are disallowed by enterprise organization policies, authenticate via:
+    ```bash
+    bash <(curl -sSL https://storage.googleapis.com/cloud-samples-data/adc/setup_adc.sh)
+    # Print OAuth access token:
+    gcloud auth print-access-token
+    ```
+    Set `VITE_GCP_ACCESS_TOKEN` in your `.env` or paste your `ya29...` token directly into the connector modal to stream via Google Cloud Vertex AI!
+  - **Google AI Studio API Keys**: Also supports `AIza...` keys via `VITE_GEMINI_API_KEY` or modal input.
+  - One-click modal in the chat header with instant token/key validation and `localStorage` persistence.
+  - Seamless offline dynamic simulation fallback if running unauthenticated.
 - **1-Click Board Publishing**:
   - Directorial dossiers, turnaround targets, or drafted directives can be promoted to the public studio bulletin board in a single click via **"Publish to Directors' Board"**.
 

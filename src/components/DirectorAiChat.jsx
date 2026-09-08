@@ -36,7 +36,7 @@ export default function DirectorAiChat({
 
 Powered by **Gemini 2.0 Flash (Frontier Multimodal Intelligence)** with real-time token streaming. 
 
-I have full, live visibility into your **5 scenes across Picture Editorial, VFX, Sound Post, Color/DI, and Mastering**. Ask me anything about what is happening where in the pipelines or click any inquiry below.`
+I have full, live visibility into your **5 scenes, full crew roster, contributors, cast, Picture Editorial, VFX, Sound Post, Color/DI, and Mastering**. Ask me about the crew, what is happening where in the pipelines, or click any inquiry below.`
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
@@ -189,18 +189,24 @@ I have full, live visibility into your **5 scenes across Picture Editorial, VFX,
                 </select>
               </div>
 
-              {/* API Key Status Pill / Trigger */}
+              {/* API Key / Cloud ADC Status Pill */}
               <button
                 onClick={() => setShowKeyModal(true)}
                 className={`flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono font-semibold border transition ${
                   geminiApiKey && geminiApiKey.trim()
                     ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25'
-                    : 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25 animate-pulse'
+                    : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25'
                 }`}
-                title={geminiApiKey ? "Gemini API Key active. Click to edit." : "Connect Gemini API Key for Live Frontier Models"}
+                title="Google Cloud Run ADC Connected. Click for custom override."
               >
-                <Key className="w-3 h-3" />
-                <span>{geminiApiKey && geminiApiKey.trim() ? "🟢 Live Frontier API" : "🔑 Connect API Key"}</span>
+                <Key className="w-3 h-3 text-emerald-400" />
+                <span>
+                  {geminiApiKey && geminiApiKey.trim().startsWith('ya29.')
+                    ? "🟢 Live GCP ADC (OAuth)"
+                    : geminiApiKey && geminiApiKey.trim()
+                    ? "🟢 Live Frontier API"
+                    : "🟢 Live Cloud Run (ADC)"}
+                </span>
               </button>
             </div>
 
@@ -349,7 +355,7 @@ I have full, live visibility into your **5 scenes across Picture Editorial, VFX,
           <div className="relative flex-1">
             <input
               type="text"
-              placeholder={`Ask about what's happening where (e.g. "What is happening in Scene 3 VFX and Sound?", "Why is Scene 4 blocked?")...`}
+              placeholder={`Ask about the crew or pipelines (e.g. "Who is the crew?", "What is happening in Scene 3?", "Who is editing Scene 2?")...`}
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               disabled={isLoading}
@@ -392,8 +398,8 @@ I have full, live visibility into your **5 scenes across Picture Editorial, VFX,
                   <Key className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Google Gemini API Key</h4>
-                  <p className="text-[11px] text-gray-400">Enables live Gemini 2.0 Flash &amp; 1.5 Pro</p>
+                  <h4 className="text-sm font-bold text-white">GCP ADC Token / Gemini API Key</h4>
+                  <p className="text-[11px] text-gray-400">Enables live Gemini 2.0 Flash &amp; Vertex AI</p>
                 </div>
               </div>
               <button 
@@ -407,26 +413,31 @@ I have full, live visibility into your **5 scenes across Picture Editorial, VFX,
             <form onSubmit={handleSaveKey} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-gray-300 mb-1.5">
-                  Enter Gemini API Key
+                  Enter GCP ADC Access Token or API Key
                 </label>
                 <input
                   type="password"
-                  placeholder="AIzaSy..."
+                  placeholder="ya29... (ADC Access Token) or AIzaSy... (API Key)"
                   value={apiKeyInput}
                   onChange={(e) => setApiKeyInput(e.target.value)}
                   className="w-full bg-[#0B0D13] border border-[#1E2333] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-indigo-500 font-mono"
                 />
-                <p className="text-[10px] text-gray-500 mt-1.5">
-                  Your key is saved locally in your browser. Get a key from the{' '}
-                  <a 
-                    href="https://aistudio.google.com/app/apikey" 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="text-indigo-400 hover:underline"
-                  >
-                    Google AI Studio portal &rarr;
-                  </a>
-                </p>
+                
+                <div className="mt-2 p-2.5 rounded-lg bg-[#0B0D13] border border-[#1E2333] text-[10px] space-y-1.5 text-gray-400">
+                  <div className="text-indigo-300 font-semibold flex items-center space-x-1">
+                    <ShieldCheck className="w-3 h-3 text-indigo-400" />
+                    <span>API Keys disallowed in your GCP Organization?</span>
+                  </div>
+                  <p>
+                    Use Application Default Credentials (ADC). Run in your terminal:
+                  </p>
+                  <code className="block bg-[#141721] p-1.5 rounded text-[10px] font-mono text-emerald-300 border border-[#1E2333] overflow-x-auto select-all">
+                    gcloud auth print-access-token
+                  </code>
+                  <p className="text-gray-500">
+                    Paste the output (<code className="text-emerald-400">ya29...</code>) above, or set <code className="text-indigo-300">VITE_GCP_ACCESS_TOKEN</code> in your environment.
+                  </p>
+                </div>
               </div>
 
               <div className="flex items-center justify-end space-x-2 pt-2 border-t border-[#1E2333]">

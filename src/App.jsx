@@ -122,11 +122,18 @@ export default function App() {
 
   const [importScriptText, setImportScriptText] = useState(SCRIPT_PRESETS[0].text);
   const [geminiApiKey, setGeminiApiKey] = useState(() => {
+    const envKey = (
+      import.meta.env.VITE_GCP_ACCESS_TOKEN || 
+      import.meta.env.GCP_ACCESS_TOKEN || 
+      import.meta.env.VITE_GEMINI_API_KEY || 
+      import.meta.env.GEMINI_API_KEY || 
+      ''
+    ).trim();
     try {
-      return localStorage.getItem("blockbuster_gemini_api_key") || import.meta.env.VITE_GEMINI_API_KEY || '';
-    } catch (e) {
-      return import.meta.env.VITE_GEMINI_API_KEY || '';
-    }
+      const stored = localStorage.getItem("blockbuster_gemini_api_key");
+      if (stored && stored.trim().length > 0) return stored.trim();
+    } catch (e) {}
+    return envKey;
   });
 
   const handleUpdateApiKey = (newKey) => {
