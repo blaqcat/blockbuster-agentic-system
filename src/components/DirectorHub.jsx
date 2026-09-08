@@ -22,6 +22,7 @@ export default function DirectorHub({
   onAcknowledgeBoardNote,
   onAddReplyToBoardNote,
   geminiApiKey,
+  onUpdateApiKey,
   initialSubTab = 'board'
 }) {
   const currentRole = USER_ROLES[currentRoleKey] || USER_ROLES.EXECUTIVE_DIRECTOR;
@@ -124,6 +125,7 @@ export default function DirectorHub({
         <DirectorAiChat 
           project={project}
           geminiApiKey={geminiApiKey}
+          onUpdateApiKey={onUpdateApiKey}
           currentRoleKey={currentRoleKey}
           onPostToBoard={handlePostToBoardFromAi}
         />

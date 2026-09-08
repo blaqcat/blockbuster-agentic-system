@@ -121,7 +121,22 @@ export default function App() {
   };
 
   const [importScriptText, setImportScriptText] = useState(SCRIPT_PRESETS[0].text);
-  const [geminiApiKey, setGeminiApiKey] = useState('');
+  const [geminiApiKey, setGeminiApiKey] = useState(() => {
+    try {
+      return localStorage.getItem("blockbuster_gemini_api_key") || import.meta.env.VITE_GEMINI_API_KEY || '';
+    } catch (e) {
+      return import.meta.env.VITE_GEMINI_API_KEY || '';
+    }
+  });
+
+  const handleUpdateApiKey = (newKey) => {
+    const clean = newKey ? newKey.trim() : '';
+    setGeminiApiKey(clean);
+    try {
+      localStorage.setItem("blockbuster_gemini_api_key", clean);
+    } catch (e) {}
+  };
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [successBanner, setSuccessBanner] = useState('');
 
@@ -559,6 +574,7 @@ export default function App() {
             onAcknowledgeBoardNote={handleAcknowledgeBoardNote}
             onAddReplyToBoardNote={handleAddBoardNoteReply}
             geminiApiKey={geminiApiKey}
+            onUpdateApiKey={handleUpdateApiKey}
           />
         )}
 

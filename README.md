@@ -2,7 +2,7 @@
 ### Intelligent Post-Production Workflow Orchestrator & Multi-Agent Cinema Engine
 
 > **Built for the Google Cloud Agentic Cinema Hackathon ($75k Track)**  
-> Powered by **Google Cloud GenAI (Gemini 1.5)**, **Autonomous Enterprise Multi-Agent Fleet**, **Grafana Telemetry APIs**, **Google Cloud Run**, and **Identity-Aware Proxy (IAP)**.  
+> Powered by **Google Cloud GenAI (Gemini 2.0 Flash & Gemini 1.5 Pro)**, **Director AI Pipeline Copilot**, **Public Board of Directors' Directives**, **Autonomous Enterprise Multi-Agent Fleet**, **Grafana Telemetry APIs**, **Google Cloud Run**, and **Identity-Aware Proxy (IAP)**.  
 > 📄 Read the complete project story & hackathon submission in **[`SUBMISSION.md`](SUBMISSION.md)**.
 
 ---
@@ -89,12 +89,43 @@ Film and television editing is fundamentally an intuitive, nonlinear craft. Beca
 
 ## ✨ Core Application Features
 
-### 1. 🎬 Master Scene Matrix
+### 1. 🤖 Director AI Pipeline Copilot (Powered by Google Gemini 2.0 Flash & 1.5 Pro)
+- **Frontier Multimodal Intelligence**:
+  - **Gemini 2.0 Flash (Default Flagship):** Sub-second (~200ms) real-time token streaming with state-of-the-art cinematic reasoning.
+  - **Gemini 1.5 Pro (Deep Cinematic Reasoning):** 2M token context window for complex cross-scene narrative continuity, emotional rhythm analysis, and multi-department scheduling.
+  - **Gemini 1.5 Flash (Balanced):** Standard fast multimodal speed for quick turnaround checks.
+  - **In-Chat Model Selector:** Switch between frontier models on the fly.
+- **Granular Pipeline Telemetry (Zero Canned Responses)**:
+  - Deep scene-by-scene tracking across all 5 post-production tracks:
+    - *Picture Editorial:* Cut stages, 8-frame eyeline trim status, and lock sign-off readiness.
+    - *VFX & CGI:* Shot-level inventory, approved vs pending shots (e.g. 8 orbital Earth passes in Scene 3), plate pulls, and vendor turnaround tracking.
+    - *Sound Post:* Dialogue stem freezing, Foley, Atmos spatial mixing, and holds caused by unlocked picture cuts.
+    - *Color / DI:* ACEScc/Rec.709 LUT conforms (e.g. Kodak 5219, Teal & Orange), CRT phosphor balancing, and lock holds.
+    - *Mastering & QC:* DCI specs, IMF packaging readiness, and audio loudness compliance (-24 LKFS).
+- **Inline API Key Connector**:
+  - One-click **"🔑 Connect API Key"** modal right in the chat header with instant validation and `localStorage` persistence.
+  - Supports live Google AI Studio API keys or seamless offline dynamic simulation fallback.
+- **1-Click Board Publishing**:
+  - Directorial dossiers, turnaround targets, or drafted directives can be promoted to the public studio bulletin board in a single click via **"Publish to Directors' Board"**.
+
+### 2. 📋 Public Board of Directors' Notes (Studio-Wide Directives)
+- **Universal Production Transparency**:
+  - A studio-wide bulletin board visible to all 4 User Levels (`EXECUTIVE_DIRECTOR`, `LEAD_EDITOR`, `CRAFT_SUPERVISOR`, `CLIENT_REVIEWER`).
+  - Directors post high-priority mandates, delivery targets, and creative revisions.
+- **Interactive Crew Engagement**:
+  - **Directive Acknowledgments:** Crew members click "Acknowledge Directive" to record their name, role title, and timestamp. Real-time count of all acknowledging department heads.
+  - **Threaded Discussions:** Full comment threads for each directive, enabling editors, sound designers, and colorists to discuss conform timelines and confirm delivery schedules.
+- **Global Pinned Mandate Ticker**:
+  - High-priority director directives can be pinned, triggering a persistent broadcast ticker across all views with one-click navigation to the board.
+- **Filters & Full-Text Search**:
+  - Filter directives by department (`EDITORIAL`, `VFX`, `SOUND`, `COLOR`, `CLIENT`) and priority (`CRITICAL`, `HIGH`, `CREATIVE`, `MILESTONE`).
+
+### 3. 🎬 Master Scene Matrix
 - Real-time grid of all scenes broken down by **Act** (Act I, Act IIA, Act IIB, Act III).
 - 1-click status badge toggles across **Picture**, **Sound**, **VFX**, **Color**, and **Mastering**.
 - Global search and filtering by character name, slugline, or Act.
 
-### 2. 📋 Department Pipeline Board (Kanban)
+### 4. 📋 Department Pipeline Board (Kanban)
 - Focused swimlane views tailored to each department's workflow stages:
   - *Picture:* Assembly &rarr; Rough Cut &rarr; Fine Cut &rarr; Picture Lock 🔒
   - *Sound:* Not Started &rarr; Spotting / ADR &rarr; Sound Design & Foley &rarr; Final Mix
@@ -102,24 +133,24 @@ Film and television editing is fundamentally an intuitive, nonlinear craft. Beca
   - *Color:* Awaiting Picture Lock &rarr; Look Dev & Primary &rarr; Review Pass &rarr; Graded & Signed Off 🎨
   - *Mastering:* Pending &rarr; QC Verification &rarr; QC Passed &rarr; DCP / Master Ready 📦
 
-### 3. 📄 Universal Document Ingestion (.PDF, .DOCX, .FOUNTAIN, .TXT)
+### 5. 📄 Universal Document Ingestion (.PDF, .DOCX, .FOUNTAIN, .TXT)
 - Integrated drag-and-drop file ingestion using `pdfjs-dist` and `mammoth`.
 - Automatically extracts sluglines, character dialogue, and Act headings directly from screenplay files.
 - Includes preloaded screenplay presets:
   - ⚡ *The Vault Protocol (Heist Thriller)*
   - ⚡ *Neon Horizon (Cyberpunk Action)*
 
-### 4. 📊 Director Milestone Analytics (Grafana-style Radar)
+### 6. 📊 Director Milestone Analytics (Grafana-style Radar)
 - **Burn-Down & Velocity Curve**: Visualizes actual unlocked scenes against the ideal linear schedule.
 - **Department Readiness Radar**: 5-axis synchronization radar tracking readiness across all post departments.
 - **Pacing & Screenplay Density**: Analyzes page count vs. estimated runtime and VFX shot density per scene.
 - **Grafana Cloud Telemetry Gateway**: Configure Prometheus / Grafana Influx API endpoints and push live post-production telemetry.
 
-### 5. 💬 Director & Lead Editor Review Hub
-- Centralized spotting logs and timecode-anchored revision trackers.
+### 7. 💬 Director & Lead Editor Review Hub
+- Centralized spotting logs, scene-by-scene notes, and timecode-anchored revision trackers.
 - Direct input for director feedback linked to scene cuts.
 
-### 6. 📦 NLE Interchange Export
+### 8. 📦 NLE Interchange Export
 - One-click export to **OpenTimelineIO (`.otio`)** and **Final Cut Pro XML (`.fcpxml`)** for DaVinci Resolve, Adobe Premiere Pro, and Avid Media Composer.
 
 ---
@@ -151,7 +182,8 @@ Open **`http://localhost:3000`** in your browser.
 
 | Layer / Category | Technology / Tool | Purpose & Usage in Train Platform |
 | :--- | :--- | :--- |
-| **Foundation Models & AI** | **Google Cloud Gemini 1.5 Pro** | Deep contextual screenplay breakdown, character emotional arc parsing, and multi-scene narrative analysis. |
+| **Foundation Models & AI** | **Google Cloud Gemini 2.0 Flash** | Frontier low-latency (~200ms) multimodal intelligence powering the real-time Director AI Pipeline Copilot with token streaming. |
+| **Foundation Models & AI** | **Google Cloud Gemini 1.5 Pro** | Deep cinematic reasoning, 2M token context cross-scene narrative continuity, and screenplay breakdown. |
 | **Foundation Models & AI** | **Google Cloud Gemini 1.5 Flash** | Low-latency autonomous agent audits, turnaround calculations, and real-time SLA reminder evaluations. |
 | **AI Orchestration** | **`@google/generative-ai` SDK** | Client & edge SDK integrating Gemini multimodal models with custom schema formatting. |
 | **Multi-Agent Engine** | **Autonomous Sentry Fleet** | 6-agent hierarchy (Supervisor, Picture Sentry, Sound Dispatcher, VFX Warden, Color Auditor, QC Inspector). |
