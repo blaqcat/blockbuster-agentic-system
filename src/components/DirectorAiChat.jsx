@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
-  Bot, Send, Sparkles, RefreshCw, Copy, Check, MessageSquare, 
-  AlertTriangle, ShieldCheck, Zap, ArrowRight, CornerDownLeft, Flame, Share2
+  Bot, Send, Sparkles, Copy, Check, Zap, Share2, Gauge
 } from 'lucide-react';
 import { 
-  chatWithDirectorAgent, 
+  chatWithDirectorAgentStream, 
+  DIRECTOR_AI_MODELS,
   DIRECTOR_QUICK_PROMPTS, 
   extractProjectOverview 
 } from '../services/directorAgentService';
@@ -19,6 +19,7 @@ export default function DirectorAiChat({
   const currentRole = USER_ROLES[currentRoleKey] || USER_ROLES.EXECUTIVE_DIRECTOR;
   const overview = extractProjectOverview(project);
 
+  const [selectedModel, setSelectedModel] = useState("gemini-1.5-flash-8b");
   const [messages, setMessages] = useState([
     {
       id: "msg_init",
@@ -26,11 +27,7 @@ export default function DirectorAiChat({
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       text: `Hello ${project.director || 'Director'}. I am your **Executive AI Strategic Post-Production Advisor** for *"${project.title}"*. 
 
-I am tracking all **${overview.totalScenes} scenes** in real time across Picture, Sound, VFX, Color, and Mastering. 
-
-Currently, your cut is **${overview.lockPercentage}% Picture Locked** and VFX is **${overview.vfxPercentage}% Approved** (${overview.pendingVfx} shots in turnaround).
-
-Select a quick briefing below or ask me any question about your post-production pipeline.`
+Streaming enabled via **Gemini 1.5 Flash-8B (Ultra-Low Latency)**. Select a quick prompt below or ask any question for immediate real-time feedback.`
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
@@ -57,36 +54,42 @@ Select a quick briefing below or ask me any question about your post-production 
       text: text.trim()
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    const streamMsgId = `ai_${Date.now()}`;
+    const initialAiMsg = {
+      id: streamMsgId,
+      role: "assistant",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      text: ""
+    };
+
+    setMessages(prev => [...prev, userMsg, initialAiMsg]);
     if (!textToSend) setInputMessage('');
     setIsLoading(true);
 
     try {
-      const responseText = await chatWithDirectorAgent(
+      await chatWithDirectorAgentStream(
         userMsg.text, 
         messages, 
         project, 
-        geminiApiKey
+        geminiApiKey,
+        selectedModel,
+        (chunk, currentFull) => {
+          setMessages(prev => prev.map(m => {
+            if (m.id === streamMsgId) {
+              return { ...m, text: currentFull };
+            }
+            return m;
+          }));
+        }
       );
-
-      const aiMsg = {
-        id: `ai_${Date.now()}`,
-        role: "assistant",
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        text: responseText
-      };
-      setMessages(prev => [...prev, aiMsg]);
     } catch (err) {
       console.error(err);
-      setMessages(prev => [
-        ...prev, 
-        {
-          id: `err_${Date.now()}`,
-          role: "assistant",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          text: `⚠️ **Advisory Agent Notice:** Encountered an issue connecting to Gemini: ${err.message}. Retrying with local telemetry engine.`
+      setMessages(prev => prev.map(m => {
+        if (m.id === streamMsgId) {
+          return { ...m, text: `⚠️ **Advisory Notice:** ${err.message}` };
         }
-      ]);
+        return m;
+      }));
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +103,6 @@ Select a quick briefing below or ask me any question about your post-production 
 
   const handlePromoteToBoard = (msgText) => {
     if (!onPostToBoard) return;
-    // Extract a meaningful title from the first line or default
     const cleanLines = msgText.split('\n').filter(l => l.trim().length > 0);
     let title = "Executive Director Production Directive";
     if (cleanLines[0]) {
@@ -117,7 +119,7 @@ Select a quick briefing below or ask me any question about your post-production 
 
   return (
     <div className="bg-[#141721] border border-[#1E2333] rounded-2xl overflow-hidden flex flex-col h-[700px] shadow-2xl">
-      {/* Top Telemetry Ticker */}
+      {/* Top Header & Model Speed Selector */}
       <div className="bg-[#0B0D13] border-b border-[#1E2333] px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0">
@@ -128,12 +130,24 @@ Select a quick briefing below or ask me any question about your post-production 
               <h3 className="text-sm font-bold text-white flex items-center space-x-1.5">
                 <span>Director AI Executive Copilot</span>
               </h3>
-              <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                {geminiApiKey ? "Gemini 1.5 Pro Active" : "Gemini Engine (Telemetry Sim)"}
-              </span>
+              
+              <div className="flex items-center space-x-1 bg-[#141721] border border-emerald-500/30 rounded-lg px-2 py-0.5">
+                <Gauge className="w-3 h-3 text-emerald-400" />
+                <select
+                  value={selectedModel}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                  className="bg-transparent text-[10px] font-mono font-bold text-emerald-300 focus:outline-none cursor-pointer"
+                >
+                  {DIRECTOR_AI_MODELS.map(m => (
+                    <option key={m.id} value={m.id} className="bg-[#141721] text-gray-200">
+                      {m.badge} - {m.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             <p className="text-[11px] text-gray-400">
-              Autonomous oversight &bull; Real-time scene health &bull; Executive briefings
+              Low-latency token streaming &bull; Grounded telemetry &bull; Executive briefings
             </p>
           </div>
         </div>
@@ -195,7 +209,6 @@ Select a quick briefing below or ask me any question about your post-production 
                   ? 'bg-indigo-600 text-white rounded-tr-none' 
                   : 'bg-[#0B0D13] border border-[#1E2333] text-gray-200 rounded-tl-none'
               }`}>
-                {/* Message Header */}
                 <div className="flex items-center justify-between pb-1 border-b border-white/10 text-[10px]">
                   <span className="font-bold flex items-center space-x-1.5 opacity-90">
                     {isUser ? (
@@ -210,13 +223,11 @@ Select a quick briefing below or ask me any question about your post-production 
                   <span className="opacity-60 font-mono">{m.timestamp}</span>
                 </div>
 
-                {/* Message Body (Markdown formatted) */}
                 <div className="prose prose-invert prose-xs max-w-none whitespace-pre-wrap font-sans text-gray-200">
-                  {m.text}
+                  {m.text || (isLoading && m.id === messages[messages.length - 1]?.id ? "⚡ Streaming response..." : "")}
                 </div>
 
-                {/* AI Action Tools */}
-                {!isUser && (
+                {!isUser && m.text && (
                   <div className="pt-2 border-t border-[#1E2333] flex flex-wrap items-center justify-between gap-2 text-[11px]">
                     <div className="flex items-center space-x-2">
                       <button
@@ -241,45 +252,19 @@ Select a quick briefing below or ask me any question about your post-production 
                         <button
                           onClick={() => handlePromoteToBoard(m.text)}
                           className="flex items-center space-x-1 px-2.5 py-1 rounded bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 transition font-semibold"
-                          title="Post this AI overview or directive to the Public Board of Directors Notes"
                         >
                           <Share2 className="w-3 h-3 text-amber-400" />
                           <span>Post to Directors' Board</span>
                         </button>
                       )}
                     </div>
-
-                    <span className="text-[10px] text-gray-500 font-mono">
-                      Target: L1 Executive Strategy
-                    </span>
                   </div>
                 )}
               </div>
-
-              {isUser && (
-                <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 flex items-center justify-center shrink-0 mt-0.5 overflow-hidden">
-                  <img 
-                    src={currentRole.defaultUser.avatar} 
-                    alt="Director" 
-                    className="w-full h-full object-cover" 
-                  />
-                </div>
-              )}
             </div>
           );
         })}
 
-        {isLoading && (
-          <div className="flex items-start space-x-3">
-            <div className="w-7 h-7 rounded-lg bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center shrink-0 mt-0.5">
-              <Bot className="w-3.5 h-3.5 animate-pulse" />
-            </div>
-            <div className="bg-[#0B0D13] border border-[#1E2333] rounded-2xl rounded-tl-none p-4 text-xs text-indigo-300 flex items-center space-x-2 shadow-sm">
-              <RefreshCw className="w-3.5 h-3.5 animate-spin text-indigo-400" />
-              <span>Synthesizing cross-department telemetry &amp; generating executive overview...</span>
-            </div>
-          </div>
-        )}
         <div ref={messagesEndRef} />
       </div>
 
@@ -295,7 +280,7 @@ Select a quick briefing below or ask me any question about your post-production 
           <div className="relative flex-1">
             <input
               type="text"
-              placeholder={`Ask the Director AI Copilot (e.g., "Give me an overview of Act II", "Which VFX shots are stalled?")...`}
+              placeholder={`Ask the Director AI Copilot...`}
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               disabled={isLoading}
@@ -309,15 +294,15 @@ Select a quick briefing below or ask me any question about your post-production 
           <button
             type="submit"
             disabled={!inputMessage.trim() || isLoading}
-            className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:hover:bg-indigo-600 rounded-xl text-xs font-semibold text-white transition flex items-center space-x-1.5 shadow-md shadow-indigo-600/20 shrink-0"
+            className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 rounded-xl text-xs font-semibold text-white transition flex items-center space-x-1.5 shadow-md shadow-indigo-600/20 shrink-0"
           >
             <Send className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Ask Agent</span>
           </button>
         </form>
         <div className="mt-1.5 flex items-center justify-between text-[10px] text-gray-500">
-          <span>AI grounded in live scene telemetry, cut progression, and department turnaround logs.</span>
-          <span className="font-mono">Ready for Director Jerry Vance</span>
+          <span>⚡ Using Gemini 1.5 Flash-8B for lowest latency token streaming.</span>
+          <span className="font-mono">Streaming Active</span>
         </div>
       </div>
     </div>

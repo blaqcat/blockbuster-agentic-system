@@ -1,6 +1,33 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 /**
+ * Available Gemini models with latency characteristics
+ */
+export const DIRECTOR_AI_MODELS = [
+  {
+    id: "gemini-1.5-flash-8b",
+    name: "Gemini 1.5 Flash-8B",
+    speed: "Ultra-Fast (~200ms)",
+    badge: "⚡ Lowest Latency",
+    description: "Fastest turnaround for rapid-fire director queries and live briefings."
+  },
+  {
+    id: "gemini-1.5-flash",
+    name: "Gemini 1.5 Flash",
+    speed: "Fast (~800ms)",
+    badge: "🚀 Balanced",
+    description: "Standard multimodal speed with balanced reasoning."
+  },
+  {
+    id: "gemini-1.5-pro",
+    name: "Gemini 1.5 Pro",
+    speed: "Analytical (~2-3s)",
+    badge: "🧠 Deep Reasoning",
+    description: "Heavy cinematic script analysis and complex schedule reconciliation."
+  }
+];
+
+/**
  * Computes deep post-production analytics and health metrics for the Director AI
  */
 export function extractProjectOverview(project) {
@@ -128,60 +155,94 @@ export const DIRECTOR_QUICK_PROMPTS = [
 ];
 
 /**
- * Chat with Director AI Agent using Gemini with contextual simulation fallback
+ * Ultra-fast streaming chat with Gemini 1.5 Flash-8B default
  */
-export async function chatWithDirectorAgent(userMessage, conversationHistory, project, apiKey) {
+export async function chatWithDirectorAgentStream(
+  userMessage, 
+  conversationHistory, 
+  project, 
+  apiKey, 
+  modelId = "gemini-1.5-flash-8b", 
+  onChunk
+) {
   const overview = extractProjectOverview(project);
 
   if (apiKey && apiKey.trim()) {
     try {
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const genAI = new GoogleGenerativeAI(apiKey.trim());
+      const model = genAI.getGenerativeModel({ 
+        model: modelId,
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: 900
+        }
+      });
 
-      const contextPrompt = `You are the Executive Director's AI Strategic Post-Production Advisor on the Hollywood feature film "${overview.title}".
-Your principal user is the Film Director (${overview.director}) and Lead Editor (${overview.leadEditor}).
-
-Current Production Telemetry:
-- Film Title: "${overview.title}"
-- Total Scenes: ${overview.totalScenes}
-- Picture Lock Progress: ${overview.lockedCount}/${overview.totalScenes} scenes (${overview.lockPercentage}%)
-- Cut Breakdown: ${overview.lockedCount} Locked, ${overview.fineCutCount} Fine Cut, ${overview.roughCutCount} Rough Cut, ${overview.assemblyCount} Assembly
+      const systemPrompt = `You are the Executive Director's AI Strategic Post-Production Advisor on "${overview.title}".
+Grounded Live Telemetry:
+- Film: "${overview.title}" | Director: ${overview.director} | Editor: ${overview.leadEditor}
+- Picture Lock: ${overview.lockedCount}/${overview.totalScenes} scenes (${overview.lockPercentage}%)
+- Cut Progression: ${overview.lockedCount} Locked, ${overview.fineCutCount} Fine Cut, ${overview.roughCutCount} Rough Cut, ${overview.assemblyCount} Assembly
 - VFX Progress: ${overview.approvedVfx}/${overview.totalVfx} shots approved (${overview.vfxPercentage}%), ${overview.pendingVfx} backlog
 - Sound Mix: ${overview.soundFinal} Final Mix, ${overview.soundDesign} Sound Design, ${overview.soundSpotting} Spotting, ${overview.soundNotStarted} Not Started
 - Color DI: ${overview.colorApproved} Approved, ${overview.colorInGrade} In Grade, ${overview.colorPendingLock} Pending Lock
-- Mastering/QC: ${overview.masteringPassed}/${overview.totalScenes} passed
-- Act Breakdown: ${JSON.stringify(overview.acts)}
 - Identified Bottlenecks: ${JSON.stringify(overview.bottlenecks)}
-- Detailed Scene List: ${JSON.stringify(project.scenes.map(s => ({
-    scene: s.sceneNumber,
-    slugline: s.slugline,
-    act: s.act,
-    picture: s.picture?.status,
-    pictureNote: s.picture?.note,
-    vfx: `${s.vfx?.shotsApproved || 0}/${s.vfx?.shotsCount || 0} approved (${s.vfx?.note || ''})`,
-    sound: `${s.sound?.status} (${s.sound?.note || ''})`,
-    color: `${s.color?.status} (${s.color?.lut || ''})`
-  })))}
 
-Respond with authoritative, executive-level cinema post-production expertise.
-Use clear headings, bullet points, and highlight key metrics.
-If the Director asks for an overview, provide a concise summary with progress percentages, immediate priority focus, and recommended directives.
-Keep tone professional, encouraging, cinematic, and sharply focused on delivery deadlines.`;
+Respond rapidly with crisp, authoritative executive bullet points, clear percentages, and decisive next steps.`;
 
-      const historyFormatted = conversationHistory.map(m => `${m.role === 'user' ? 'DIRECTOR' : 'AI ADVISOR'}: ${m.text}`).join('\n\n');
-      const prompt = `${contextPrompt}\n\nConversation So Far:\n${historyFormatted}\n\nDIRECTOR: ${userMessage}\n\nAI ADVISOR:`;
+      const historyFormatted = conversationHistory
+        .slice(-4)
+        .map(m => `${m.role === 'user' ? 'DIRECTOR' : 'AI ADVISOR'}: ${m.text}`)
+        .join('\n\n');
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      return response.text();
+      const prompt = `${systemPrompt}\n\nRecent Discussion:\n${historyFormatted}\n\nDIRECTOR: ${userMessage}\n\nAI ADVISOR:`;
+
+      const result = await model.generateContentStream(prompt);
+      let fullText = "";
+
+      for await (const chunk of result.stream) {
+        const text = chunk.text();
+        fullText += text;
+        if (onChunk) onChunk(text, fullText);
+      }
+
+      return fullText;
     } catch (err) {
-      console.warn("Gemini API call failed, falling back to intelligent simulation:", err);
-      return generateSimulatedResponse(userMessage, overview, project);
+      console.warn("Gemini streaming call failed, falling back to simulated stream:", err);
+      return streamSimulatedResponse(userMessage, overview, project, onChunk);
     }
   }
 
-  // Offline / zero-config intelligent heuristic simulation
-  return generateSimulatedResponse(userMessage, overview, project);
+  // Offline / zero-config intelligent heuristic simulation with instant token streaming
+  return streamSimulatedResponse(userMessage, overview, project, onChunk);
+}
+
+/**
+ * Backwards compatibility wrapper
+ */
+export async function chatWithDirectorAgent(userMessage, conversationHistory, project, apiKey, modelId) {
+  return chatWithDirectorAgentStream(userMessage, conversationHistory, project, apiKey, modelId, null);
+}
+
+/**
+ * Fast-token streaming simulation for offline mode
+ */
+async function streamSimulatedResponse(userMessage, overview, project, onChunk) {
+  const completeText = generateSimulatedResponse(userMessage, overview, project);
+  
+  const tokens = completeText.split(/(\s+)/);
+  let accumulated = "";
+
+  for (let i = 0; i < tokens.length; i++) {
+    accumulated += tokens[i];
+    if (onChunk && i % 3 === 0) {
+      onChunk(tokens[i], accumulated);
+      await new Promise(r => setTimeout(r, 10));
+    }
+  }
+
+  if (onChunk) onChunk("", accumulated);
+  return completeText;
 }
 
 /**
